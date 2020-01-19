@@ -17,6 +17,8 @@ defmodule BayaqWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/tnb/:account_number", BillController, :get_tnb_balance
+    get "/indah_water/:account_number", BillController, :get_indah_water_balance
   end
 
   # Other scopes may use custom stacks.
