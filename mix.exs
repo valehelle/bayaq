@@ -44,7 +44,9 @@ defmodule Bayaq.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:httpoison, "~> 1.6"},
-      {:floki, "~> 0.24.0"}
+      {:poison, "~> 3.1"},
+      {:floki, "~> 0.24.0"},
+      {:money, "~> 1.4"}
     ]
   end
 

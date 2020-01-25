@@ -1,9 +1,7 @@
 defmodule BayaqWeb.BillController do
   use BayaqWeb, :controller
 
-  alias Bayaq.Bills
-  alias Bayaq.Bills.Bill
-
+  alias Bayaq.Invoices
   action_fallback BayaqWeb.FallbackController
 
   def get_tnb_balance(conn, %{"account_number" => account_number}) do
@@ -43,9 +41,45 @@ defmodule BayaqWeb.BillController do
     render(conn, "show.json", bill: bill)
   end
 
-  def pay_bills(conn, %{"bills" => bills, "email" => email}) do
-    IO.inspect bills
 
+
+  def pay_bills(conn, %{"bills" => bills, "email" => email}) do
+    {_, bills_map} = Enum.reduce(bills, %{"index" => 0}, fn bill, acc -> 
+      
+      index = Map.get(acc, "index")
+      amount = Map.get(bill, "amount")
+      {:ok, money} = Money.parse(amount, :MYR)
+
+
+      bill = %{
+        "name" => Map.get(bill, "billerCode"),
+        "description" => Map.get(bill, "ref1"),
+        "amount" => money.amount,
+        "currency" => "myr",
+        "quantity" => 1,
+      }
+
+      add_bill = Map.put_new(acc, index, bill) 
+      new_index = index + 1
+      Map.put(add_bill, "index", new_index) 
+    end) |> Map.pop("index")
+    
+    default_map = %{
+      "payment_method_types" => ["card"],
+      "success_url" => "https://example.com/success?session_id={CHECKOUT_SESSION_ID}",
+      "cancel_url" => "https://example.com/cancel"
+    }
+
+
+    stripe_param = Map.merge(default_map, %{"line_items" => bills_map})
+    req_body = Plug.Conn.Query.encode(stripe_param)
+    {:ok, %HTTPoison.Response{status_code: 200, body: body}} = HTTPoison.post "https://api.stripe.com/v1/checkout/sessions", req_body, %{"Content-type" => "application/x-www-form-urlencoded", "Authorization" => "Bearer sk_test_EtxDujuNveQdHfyb6AYsvIGw004jQrHgCK"}
+    body = Poison.decode!(body)
+    stripe_id =  Map.get(body, "id")
+    invoice_param = %{"stripe_id" => stripe_id, "bills" => bills, "email" => email}
+    {:ok, invoice} = Invoices.create_invoice(invoice_param)
+    invoice = %{"id" => invoice.id, "stripe_id" => invoice.stripe_id}
+    render(conn, "show_invoice.json", invoice: invoice)
   end
 
 end

@@ -9,8 +9,13 @@ defmodule BayaqWeb.BillView do
   def render("show.json", %{bill: bill}) do
     bill
   end
+  
+  def render("show_invoice.json", %{invoice: invoice}) do
+    invoice
+  end
 
   def render("bill.json", bill) do
     bill
   end
+
 end
