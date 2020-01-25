@@ -43,4 +43,9 @@ defmodule BayaqWeb.BillController do
     render(conn, "show.json", bill: bill)
   end
 
+  def pay_bills(conn, %{"bills" => bills, "email" => email}) do
+    IO.inspect bills
+
+  end
+
 end

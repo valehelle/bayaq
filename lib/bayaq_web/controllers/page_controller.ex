@@ -2,6 +2,8 @@ defmodule BayaqWeb.PageController do
   use BayaqWeb, :controller
 
   def index(conn, _params) do
+    url = "https://api.stripe.com/v1/checkout/sessions"
+    {:ok, %HTTPoison.Response{status_code: 302, body: body, headers: headers}} = HTTPoison.post "https://myaccount.mytnb.com.my/Payment/QuickPay/Search?caNumber=220153258408", [], [follow_redirect: false]
     render(conn, "index.html")
   end
 
@@ -12,6 +14,8 @@ defmodule BayaqWeb.PageController do
     {:ok, document} = Floki.parse_fragment(body)
 
   end
+
+
 
   def get_indah_water_balance() do
     options = [recv_timeout: 10000]
