@@ -48,7 +48,7 @@ defmodule BayaqWeb.BillController do
       
       index = Map.get(acc, "index")
       amount = Map.get(bill, "amount")
-      {:ok, money} = Money.parse(amount, :MYR)
+      money = Money.new(amount, :MYR)
 
 
       bill = %{
@@ -67,7 +67,7 @@ defmodule BayaqWeb.BillController do
     default_map = %{
       "payment_method_types" => ["card"],
       "success_url" => "https://example.com/success?session_id={CHECKOUT_SESSION_ID}",
-      "cancel_url" => "https://example.com/cancel"
+      "cancel_url" => "http://localhost:19006/"
     }
 
 

@@ -10,6 +10,7 @@ defmodule BayaqWeb.Router do
   end
 
   pipeline :api do
+    plug CORSPlug, origin: "http://localhost:19006"
     plug :accepts, ["json"]
   end
 
@@ -23,6 +24,7 @@ defmodule BayaqWeb.Router do
     pipe_through :api
     get "/tnb/:account_number", BillController, :get_tnb_balance
     post "/pay_bills", BillController, :pay_bills
+    options   "/pay_bills", BillController, :options
     get "/indah_water/:account_number", BillController, :get_indah_water_balance
   end
 

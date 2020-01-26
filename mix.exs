@@ -46,7 +46,8 @@ defmodule Bayaq.MixProject do
       {:httpoison, "~> 1.6"},
       {:poison, "~> 3.1"},
       {:floki, "~> 0.24.0"},
-      {:money, "~> 1.4"}
+      {:money, "~> 1.4"},
+      {:cors_plug, "~> 1.5"}
     ]
   end
 

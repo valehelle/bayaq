@@ -3,7 +3,7 @@ defmodule Bayaq.Bills.Bill do
   import Ecto.Changeset
   alias Bayaq.Invoices.Invoice
   schema "bills" do
-    field :amount, :string
+    field :amount, Money.Ecto.Amount.Type
     field :bill_id, :string
     field :biller_code, :string
     field :ref1, :string
