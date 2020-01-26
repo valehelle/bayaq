@@ -63,7 +63,16 @@ defmodule Bayaq.Invoices do
     {:ok, invoice}
   end
 
-
+  def invoice_paid(%{"data" => %{"object" => %{"id" => stripe_id}}} = params) do
+    IO.inspect params
+    query = from i in Invoice,
+          where: i.stripe_id == ^stripe_id
+    invoice = Repo.one(query)
+    IO.inspect stripe_id
+    IO.inspect invoice
+    invoice_changeset = Ecto.Changeset.change invoice, status: "PAYMENT_MADE"
+    Repo.update invoice_changeset
+  end
 
   @doc """
   Updates a invoice.

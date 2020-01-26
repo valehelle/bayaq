@@ -55,6 +55,8 @@ defmodule Bayaq.Bills do
     |> Repo.insert()
   end
 
+  
+
   @doc """
   Updates a bill.
 

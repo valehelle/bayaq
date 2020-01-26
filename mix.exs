@@ -47,7 +47,8 @@ defmodule Bayaq.MixProject do
       {:poison, "~> 3.1"},
       {:floki, "~> 0.24.0"},
       {:money, "~> 1.4"},
-      {:cors_plug, "~> 1.5"}
+      {:cors_plug, "~> 1.5"},
+      {:secure_compare, "~> 0.1.0"}
     ]
   end
 

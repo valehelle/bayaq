@@ -5,7 +5,7 @@ stripe.redirectToCheckout({
   // Make the id field from the Checkout Session creation API response
   // available to this file, so you can provide it as parameter here
   // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
-  sessionId: 'cs_test_9WDYfWjxC81Fx38h4cwGnhVVIaXMNidrb7m6l9w7bBN8JRjKr9djYEZb'
+  sessionId: 'cs_test_8mu9iYAmq2sY6lB9xoNqW8vockEfvkkN11VdezXLaVmJlnkOO6q47S7p'
 }).then(function (result) {
   // If `redirectToCheckout` fails due to a browser or network
   // error, display the localized error message to your customer

@@ -18,6 +18,7 @@ defmodule BayaqWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    
   end
   
   scope "/", BayaqWeb do
@@ -25,6 +26,7 @@ defmodule BayaqWeb.Router do
     get "/tnb/:account_number", BillController, :get_tnb_balance
     post "/pay_bills", BillController, :pay_bills
     options   "/pay_bills", BillController, :options
+    post "/hooks", PageController, :hooks
     get "/indah_water/:account_number", BillController, :get_indah_water_balance
   end
 
@@ -33,3 +35,4 @@ defmodule BayaqWeb.Router do
   #   pipe_through :api
   # end
 end
+
