@@ -56,7 +56,7 @@ defmodule Bayaq.Invoices do
                       |> Repo.insert()
 
     for bill <- bills do
-      bill_changeset =  Bill.changeset(%Bill{}, %{"invoice_id" => invoice.id,"amount" => Map.get(bill, "amount"), "bill_id" => Map.get(bill, "id"), "biller_code" => Map.get(bill, "billerCode"), "ref1" => Map.get(bill, "ref1")})
+      bill_changeset =  Bill.changeset(%Bill{}, %{"invoice_id" => invoice.id,"amount" => Map.get(bill, "amount"), "bill_id" => Map.get(bill, "id"), "biller_code" => Map.get(bill, "billerCode"), "ref1" => Map.get(bill, "ref1"),"ref2" => Map.get(bill, "ref2"), "email" => Map.get(bill, "email"), "company_name" => Map.get(bill, "company_name")})
       {:ok, bill} = Repo.insert(bill_changeset)
     end
 
@@ -64,12 +64,9 @@ defmodule Bayaq.Invoices do
   end
 
   def invoice_paid(%{"data" => %{"object" => %{"id" => stripe_id}}} = params) do
-    IO.inspect params
     query = from i in Invoice,
           where: i.stripe_id == ^stripe_id
     invoice = Repo.one(query)
-    IO.inspect stripe_id
-    IO.inspect invoice
     invoice_changeset = Ecto.Changeset.change invoice, status: "PAYMENT_MADE"
     Repo.update invoice_changeset
   end

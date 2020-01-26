@@ -6,6 +6,9 @@ defmodule Bayaq.Repo.Migrations.CreateBills do
       add :biller_code, :string
       add :amount, :integer
       add :ref1, :string
+      add :ref2, :string
+      add :email, :string
+      add :company_name, :string
       add :bill_id, :string
       add :invoice_id, references(:invoices, on_delete: :nothing)
 
