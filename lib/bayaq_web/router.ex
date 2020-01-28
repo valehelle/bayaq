@@ -25,9 +25,11 @@ defmodule BayaqWeb.Router do
     pipe_through :api
     get "/tnb/:account_number", BillController, :get_tnb_balance
     post "/pay_bills", BillController, :pay_bills
-    options   "/pay_bills", BillController, :options
+    options "/pay_bills", BillController, :options
     post "/hooks", PageController, :hooks
     get "/indah_water/:account_number", BillController, :get_indah_water_balance
+    get "/bill/amount", BillController, :get_bill_amount
+    options "/bill/amount", BillController, :options
   end
 
   # Other scopes may use custom stacks.

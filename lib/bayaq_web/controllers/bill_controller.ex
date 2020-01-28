@@ -11,7 +11,9 @@ defmodule BayaqWeb.BillController do
     {:ok, document} = Floki.parse_fragment(body)
     description = Floki.find(document, "span.label-16-12") |> Floki.text
     due_date = Floki.find(document, "div.label-16-12") |> Floki.text
-    amount = Floki.find(document, "div.card-text-32-24") |> Floki.text
+    amount = Floki.find(document, "div.card-text-32-24") 
+              |> Floki.text
+              |> String.replace(~r/\.|\n|RM|\*/,"", global: true)
     bill = %{
       "description" => description,
       "due_date" => due_date,
@@ -21,7 +23,7 @@ defmodule BayaqWeb.BillController do
   end
   
   def get_indah_water_balance(conn, %{"account_number" => account_number}) do
-    options = [recv_timeout: 10000]
+    options = [recv_timeout: 20000]
     {:ok, %HTTPoison.Response{status_code: 302, body: body, headers: headers}} = HTTPoison.post "https://www.iwk.com.my/customer/pay-bill", {:form, [{"proceed", "1"}, {"accountno", "98540610"}, {"Submit", "Check+Account+Balance"}]}, %{"Content-type" => "application/x-www-form-urlencoded"}, options
     {_, cookie} = Enum.find(headers, fn v -> elem(v,0) == "Set-Cookie" end)
     {:ok, %HTTPoison.Response{status_code: 200, body: body, headers: headers}} = HTTPoison.get "https://www.iwk.com.my/customer/pay-bill-info", [], hackney: [cookie: [cookie]]
@@ -32,6 +34,7 @@ defmodule BayaqWeb.BillController do
     amount =  Floki.find(document, ".col-sm-8") 
                |> Enum.at(2)
                |> Floki.text
+               |> String.replace(~r/\.|\n|RM|\*/,"", global: true)
 
     bill = %{
       "description" => description,
@@ -80,6 +83,13 @@ defmodule BayaqWeb.BillController do
     {:ok, invoice} = Invoices.create_invoice(invoice_param)
     invoice = %{"id" => invoice.id, "stripe_id" => invoice.stripe_id}
     render(conn, "show_invoice.json", invoice: invoice)
+  end
+
+  def get_bill_amount(conn, %{"billerCode" => biller_code, "account" => account_number}) do
+    case biller_code do
+      "5454" -> get_tnb_balance(conn, %{"account_number" => account_number})
+      "68502" -> get_indah_water_balance(conn, %{"account_number" => account_number})
+    end
   end
 
 end
