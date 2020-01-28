@@ -11,9 +11,10 @@ defmodule BayaqWeb.BillController do
     {:ok, document} = Floki.parse_fragment(body)
     description = Floki.find(document, "span.label-16-12") |> Floki.text
     due_date = Floki.find(document, "div.label-16-12") |> Floki.text
-    amount = Floki.find(document, "div.card-text-32-24") 
+    {amount, _} = Floki.find(document, "div.card-text-32-24") 
               |> Floki.text
               |> String.replace(~r/\.|\n|RM|\*/,"", global: true)
+              |> Integer.parse
     bill = %{
       "description" => description,
       "due_date" => due_date,
@@ -31,10 +32,11 @@ defmodule BayaqWeb.BillController do
     description = Floki.find(document, ".col-sm-8") 
                |> Enum.at(1)
                |> Floki.text
-    amount =  Floki.find(document, ".col-sm-8") 
+    {amount, _} =  Floki.find(document, ".col-sm-8") 
                |> Enum.at(2)
                |> Floki.text
                |> String.replace(~r/\.|\n|RM|\*/,"", global: true)
+               |> Integer.parse
 
     bill = %{
       "description" => description,
@@ -55,8 +57,8 @@ defmodule BayaqWeb.BillController do
 
 
       bill = %{
-        "name" => Map.get(bill, "billerCode"),
-        "description" => Map.get(bill, "ref1"),
+        "name" => Map.get(bill, "companyName"),
+        "description" => "Account Number : #{Map.get(bill, "ref1")}",
         "amount" => money.amount,
         "currency" => "myr",
         "quantity" => 1,
@@ -68,6 +70,7 @@ defmodule BayaqWeb.BillController do
     end) |> Map.pop("index")
     
     default_map = %{
+      "customer_email" => email,
       "payment_method_types" => ["card"],
       "success_url" => "https://example.com/success?session_id={CHECKOUT_SESSION_ID}",
       "cancel_url" => "http://localhost:19006/"
