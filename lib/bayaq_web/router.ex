@@ -18,6 +18,7 @@ defmodule BayaqWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/sdfasdfjlkjskasdfsdf", PageController, :invoice
     
   end
   

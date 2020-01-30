@@ -38,6 +38,12 @@ defmodule Bayaq.Invoices do
   """
   def get_invoice!(id), do: Repo.get!(Invoice, id)
 
+  def get_invoice_paid() do
+    query = from i in Invoice,
+            where: i.status == "PAYMENT_MADE",
+            preload: [:bills]
+    Repo.all(query)
+  end
   @doc """
   Creates a invoice.
 

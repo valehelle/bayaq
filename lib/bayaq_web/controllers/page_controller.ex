@@ -5,6 +5,11 @@ defmodule BayaqWeb.PageController do
     render(conn, "index.html")
   end
 
+  def invoice(conn, _params) do
+    invoices = Invoices.get_invoice_paid()
+    render(conn, "invoice.html", invoices: invoices)
+  end
+
   def get_tnb_balance() do
     {:ok, %HTTPoison.Response{status_code: 302, body: body, headers: headers}} = HTTPoison.get "https://myaccount.mytnb.com.my/Payment/QuickPay/Search?caNumber=220153258408", [], [follow_redirect: false]
     {_, location} = Enum.find(headers, fn v -> elem(v,0) == "Location" end)
@@ -29,7 +34,7 @@ defmodule BayaqWeb.PageController do
     [signature | tail] = tail
     signature = String.split(signature, "=") |> List.last
     signed_payload = "#{timestamp}.#{conn.private[:raw_body]}"
-    expected_signature =  :crypto.hmac(:sha256, "whsec_DBLXGNDhnd3wPJC6TcQWnreYgLxTlwV8", signed_payload)
+    expected_signature =  :crypto.hmac(:sha256, "whsec_Wl7THuhBl69QErAckBEMDCIrlpHDElhR", signed_payload)
     |> Base.encode16(case: :lower)
     case SecureCompare.compare(signature, expected_signature) do
       true -> 

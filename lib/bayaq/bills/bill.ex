@@ -17,7 +17,7 @@ defmodule Bayaq.Bills.Bill do
   @doc false
   def changeset(bill, attrs) do
     bill
-    |> cast(attrs, [:biller_code, :amount, :ref1, :ref2, :email, :company_name, :bill_id])
+    |> cast(attrs, [:biller_code, :amount, :ref1, :ref2, :email, :company_name, :bill_id, :invoice_id])
     |> validate_required([:biller_code, :amount, :ref1, :bill_id])
   end
 end
