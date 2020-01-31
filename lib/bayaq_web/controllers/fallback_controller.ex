@@ -6,10 +6,12 @@ defmodule BayaqWeb.FallbackController do
   """
   use BayaqWeb, :controller
 
-  def call(conn, {:error, :not_found}) do
+  def call(conn, {:error}) do
+    bill = %{
+      "description" => "",
+      "amount" => 0,
+    }
     conn
-    |> put_status(:not_found)
-    |> put_view(BayaqWeb.ErrorView)
-    |> render(:"404")
+    |> render("show.json", bill: bill)
   end
 end
