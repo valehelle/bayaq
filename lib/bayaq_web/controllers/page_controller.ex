@@ -34,7 +34,7 @@ defmodule BayaqWeb.PageController do
     [signature | tail] = tail
     signature = String.split(signature, "=") |> List.last
     signed_payload = "#{timestamp}.#{conn.private[:raw_body]}"
-    expected_signature =  :crypto.hmac(:sha256, "whsec_Wl7THuhBl69QErAckBEMDCIrlpHDElhR", signed_payload)
+    expected_signature =  :crypto.hmac(:sha256, "whsec_OSTXti38qobS4uTAAOC7LSb2XIZndtJb", signed_payload)
     |> Base.encode16(case: :lower)
     case SecureCompare.compare(signature, expected_signature) do
       true -> 
