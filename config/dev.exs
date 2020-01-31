@@ -72,4 +72,5 @@ config :bayaq, Bayaq.Repo,
   password: "postgres",
   database: "bayaq_dev",
   hostname: "localhost",
+  stripe_key: "whsec_OSTXti38qobS4uTAAOC7LSb2XIZndtJb",
   pool_size: 10
