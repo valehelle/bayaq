@@ -83,8 +83,8 @@ defmodule BayaqWeb.BillController do
     default_map = %{
       "customer_email" => email,
       "payment_method_types" => ["card"],
-      "success_url" => "https://example.com/success?session_id={CHECKOUT_SESSION_ID}",
-      "cancel_url" => "http://localhost:19006/"
+      "success_url" => "https://bayaq.netlify.com?success=true",
+      "cancel_url" => "https://bayaq.netlify.com"
     }
 
 
