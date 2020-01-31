@@ -10,7 +10,7 @@ defmodule BayaqWeb.Router do
   end
 
   pipeline :api do
-    plug CORSPlug, origin: "http://localhost:19006"
+    plug CORSPlug, origin: ["http://localhost:19006", "https://bayaq.netlify.com"]
     plug :accepts, ["json"]
   end
 
@@ -27,6 +27,7 @@ defmodule BayaqWeb.Router do
     get "/tnb/:account_number", BillController, :get_tnb_balance
     post "/pay_bills", BillController, :pay_bills
     options "/pay_bills", BillController, :options
+    options "/hooks", BillController, :options
     post "/hooks", PageController, :hooks
     get "/indah_water/:account_number", BillController, :get_indah_water_balance
     get "/bill/amount", BillController, :get_bill_amount
