@@ -55,6 +55,9 @@ defmodule BayaqWeb.BillController do
   end
 
 
+  def wakeup(conn, _params) do
+    {:error}
+  end
 
   def pay_bills(conn, %{"bills" => bills, "email" => email}) do
     {_, bills_map} = Enum.reduce(bills, %{"index" => 0}, fn bill, acc -> 

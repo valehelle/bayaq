@@ -31,6 +31,8 @@ defmodule BayaqWeb.Router do
     get "/indah_water/:account_number", BillController, :get_indah_water_balance
     get "/bill/amount", BillController, :get_bill_amount
     options "/bill/amount", BillController, :options
+    get "/wakeup", BillController, :wakeup
+    options "/wakeup", BillController, :options
   end
 
   # Other scopes may use custom stacks.
