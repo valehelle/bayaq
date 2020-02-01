@@ -10,7 +10,7 @@ defmodule BayaqWeb.Router do
   end
 
   pipeline :api do
-    plug CORSPlug, origin: ["http://localhost:19006", "https://bayaq.netlify.com"]
+    plug CORSPlug, origin: ["http://localhost:19006", "https://bayaq.netlify.com", "http://192.168.0.153:19006"]
     plug :accepts, ["json"]
   end
 

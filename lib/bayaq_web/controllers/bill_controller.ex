@@ -60,7 +60,7 @@ defmodule BayaqWeb.BillController do
   end
 
   def pay_bills(conn, %{"bills" => bills, "email" => email}) do
-    {_, bills_map} = Enum.reduce(bills, %{"index" => 0}, fn bill, acc -> 
+    {index, bills_map} = Enum.reduce(bills, %{"index" => 0}, fn bill, acc -> 
       
       index = Map.get(acc, "index")
       amount = Map.get(bill, "amount")
@@ -79,13 +79,25 @@ defmodule BayaqWeb.BillController do
       new_index = index + 1
       Map.put(add_bill, "index", new_index) 
     end) |> Map.pop("index")
-    
+
+    charge_amount = 50 * length(bills)
+    bill_charge = %{
+        "name" => "Bayaq",
+        "description" => "Service Fee",
+        "amount" => Money.new(charge_amount, :MYR).amount,
+        "currency" => "myr",
+        "quantity" => 1,
+    }
+    bills_map = Map.put_new(bills_map, index, bill_charge) 
+
     default_map = %{
       "customer_email" => email,
       "payment_method_types" => ["card"],
       "success_url" => "https://bayaq.netlify.com?success=true",
       "cancel_url" => "https://bayaq.netlify.com"
     }
+
+    IO.inspect bills_map
 
 
     stripe_param = Map.merge(default_map, %{"line_items" => bills_map})
