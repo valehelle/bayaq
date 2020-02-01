@@ -12,6 +12,6 @@ defmodule BayaqWeb.FallbackController do
       "amount" => 0,
     }
     conn
-    |> render("show.json", bill: bill)
+    |> send_resp(404,"")
   end
 end
