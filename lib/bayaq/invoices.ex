@@ -75,6 +75,7 @@ defmodule Bayaq.Invoices do
     invoice = Repo.one(query)
     invoice_changeset = Ecto.Changeset.change invoice, status: "PAYMENT_MADE"
     Repo.update invoice_changeset
+    invoice
   end
 
   @doc """

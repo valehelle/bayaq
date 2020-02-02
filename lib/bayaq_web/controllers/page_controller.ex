@@ -40,7 +40,7 @@ defmodule BayaqWeb.PageController do
     case SecureCompare.compare(signature, expected_signature) do
       true -> 
       invoice = Invoices.invoice_paid(params)
-      send_push_notification(invoice.get_invoice_paid)
+      send_push_notification(invoice.id)
       send_resp(conn, 200, "")
       false -> send_resp(conn, 300, "")
     end
