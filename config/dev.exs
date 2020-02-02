@@ -73,4 +73,5 @@ config :bayaq, Bayaq.Repo,
   database: "bayaq_dev",
   hostname: "localhost",
   stripe_key: "whsec_OSTXti38qobS4uTAAOC7LSb2XIZndtJb",
+  stripe_api_key: "sk_test_EtxDujuNveQdHfyb6AYsvIGw004jQrHgCK"
   pool_size: 10

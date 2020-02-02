@@ -78,4 +78,5 @@ config :bayaq, Bayaq.Repo,
   ssl: true,
   url: System.get_env("DATABASE_URL"),
   stripe_key: System.get_env("STRIPE_SECRET"),
+  stripe_api_key: System.get_env("STRIPE_API_KEY"),
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
