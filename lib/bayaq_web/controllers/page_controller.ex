@@ -39,7 +39,9 @@ defmodule BayaqWeb.PageController do
     |> Base.encode16(case: :lower)
     case SecureCompare.compare(signature, expected_signature) do
       true -> 
-      Invoices.invoice_paid(params)
+      invoice = Invoices.invoice_paid(params)
+      HTTPoison.post "https://www.iwk.com.my/customer/pay-bill", "{\"to\": \"ExponentPushToken[I3QjOoCnnBIqTYbIgR1x3K]\", \"title\":\"User paid Bayaq\", \"body\": \"#{invoice.id}\"}", %{"Content-type" => "application/json"}
+
       send_resp(conn, 200, "")
       false -> send_resp(conn, 300, "")
     end

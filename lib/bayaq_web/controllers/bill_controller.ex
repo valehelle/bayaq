@@ -97,9 +97,6 @@ defmodule BayaqWeb.BillController do
       "cancel_url" => "https://bayaq.netlify.com"
     }
 
-    IO.inspect bills_map
-
-
     stripe_param = Map.merge(default_map, %{"line_items" => bills_map})
     req_body = Plug.Conn.Query.encode(stripe_param)
     {:ok, %HTTPoison.Response{status_code: 200, body: body}} = HTTPoison.post "https://api.stripe.com/v1/checkout/sessions", req_body, %{"Content-type" => "application/x-www-form-urlencoded", "Authorization" => "Bearer sk_test_EtxDujuNveQdHfyb6AYsvIGw004jQrHgCK"}
