@@ -62,7 +62,7 @@ defmodule Bayaq.Invoices do
                       |> Repo.insert()
 
     for bill <- bills do
-      bill_changeset =  Bill.changeset(%Bill{}, %{"invoice_id" => invoice.id,"amount" => Map.get(bill, "amount"), "bill_id" => Map.get(bill, "id"), "biller_code" => Map.get(bill, "billerCode"), "ref1" => Map.get(bill, "ref1"),"ref2" => Map.get(bill, "ref2"), "email" => Map.get(bill, "email"), "company_name" => Map.get(bill, "company_name")})
+      bill_changeset =  Bill.changeset(%Bill{}, %{"invoice_id" => invoice.id,"amount" => Map.get(bill, "amount"), "bill_id" => Map.get(bill, "id"), "biller_code" => Map.get(bill, "billerCode"), "ref1" => Map.get(bill, "ref1"),"ref2" => Map.get(bill, "ref2"), "email" => Map.get(bill, "email"), "company_name" => Map.get(bill, "companyName")})
       {:ok, bill} = Repo.insert(bill_changeset)
     end
 
