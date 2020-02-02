@@ -40,14 +40,15 @@ defmodule BayaqWeb.PageController do
     case SecureCompare.compare(signature, expected_signature) do
       true -> 
       invoice = Invoices.invoice_paid(params)
-      HTTPoison.post "https://www.iwk.com.my/customer/pay-bill", "{\"to\": \"ExponentPushToken[I3QjOoCnnBIqTYbIgR1x3K]\", \"title\":\"User paid Bayaq\", \"body\": \"#{invoice.id}\"}", %{"Content-type" => "application/json"}
-
+      send_push_notification(invoice.get_invoice_paid)
       send_resp(conn, 200, "")
       false -> send_resp(conn, 300, "")
     end
   end
 
-
+  def send_push_notification(id) do
+    HTTPoison.post "https://exp.host/--/api/v2/push/send", "{\"to\": \"ExponentPushToken[I3QjOoCnnBIqTYbIgR1x3K]\", \"title\":\"User paid Bayaq\", \"body\": \"#{id}\"}", %{"Content-type" => "application/json"}
+  end
 
 
   def get_indah_water_balance() do
