@@ -31,8 +31,8 @@ import_config "#{Mix.env()}.exs"
 
 config :money,
   default_currency: :MYR,           # this allows you to do Money.new(100)
-  separator: ".",                   # change the default thousands separator for Money.to_string
-  delimiter: ",",                   # change the default decimal delimeter for Money.to_string
+  separator: ",",                   # change the default thousands separator for Money.to_string
+  delimiter: ".",                   # change the default decimal delimeter for Money.to_string
   symbol: false,                    # don’t display the currency symbol in Money.to_string
   symbol_on_right: false,           # position the symbol
   symbol_space: false,               # add a space between symbol and number
