@@ -54,6 +54,39 @@ defmodule BayaqWeb.BillController do
     end
   end
 
+  def get_air_selangor(conn, %{"account_number" => account_number}) do
+
+    try do
+      headers = %{
+        "Content-type" => "application/json",
+        "Client-Service" => " Syabas-Portal-Service",
+        "X-Powered-By" => " Syabas-Air-Selangor",
+        "Accept" => "application/vnd.airselangor.portal.api+json;channel=apiv2"
+      }
+      body = "{\"device_name\":\"Firefox\",\"os_version\":\"72\",\"device_id\":\"KJFAWOX4-C3T78EO1-6HJ3GZQG-UNF08O9E\"}"
+      {:ok, %HTTPoison.Response{status_code: 200, body: body, headers: headers}} = HTTPoison.post "https://crismobile2.airselangor.com/api/portal/token", body, headers, ssl: [{:versions, [:'tlsv1.2']}]
+      token = Poison.decode!(body) |> Map.get("data") |> Map.get("token")
+
+      headers = %{
+        "Accept" => " application/vnd.airselangor.portal.api+json;channel=apiv2",
+        "Client-Service" => " Syabas-Portal-Service",
+        "X-Powered-By" => " Syabas-Air-Selangor",
+        "Authorization" => "Bearer #{token}"
+      }
+      {:ok, %HTTPoison.Response{status_code: 200, body: body, headers: headers}} = HTTPoison.get "https://crismobile2.airselangor.com/api/portal/cris/account/v2/#{account_number}/info", headers, ssl: [{:versions, [:'tlsv1.2']}]
+      amount = Poison.decode!(body) |> Map.get("data") |> Map.get("amount_due")
+      {amount, _} =  Float.to_string(amount, decimals: 2) |> String.replace(~r/\.|\n|RM|\*/,"", global: true) |> Integer.parse
+      bill = %{
+        "description" => "",
+        "amount" => amount,
+      }
+      render(conn, "show.json", bill: bill)
+    rescue
+      e -> {:error}
+    end
+
+  end
+
 
   def wakeup(conn, _params) do
     {:error}
@@ -112,6 +145,7 @@ defmodule BayaqWeb.BillController do
     case biller_code do
       "5454" -> get_tnb_balance(conn, %{"account_number" => account_number})
       "68502" -> get_indah_water_balance(conn, %{"account_number" => account_number})
+      "4200" -> get_air_selangor(conn, %{"account_number" => account_number})
     end
   end
 
