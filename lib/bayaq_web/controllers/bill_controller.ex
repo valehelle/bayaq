@@ -123,7 +123,7 @@ defmodule BayaqWeb.BillController do
     bill_amount = Money.add(Money.new(charge_amount, :MYR), Money.new(Map.get(bill, "amount"), :MYR)).amount
 
     default_map = %{
-      "collection_id" => "6lh4c0br",
+      "collection_id" => Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_collection],
       "amount" => bill_amount,
       "email" => email,
       "name" => name,
