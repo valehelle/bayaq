@@ -93,6 +93,7 @@ defmodule BayaqWeb.BillController do
   end
 
   def pay_bills(conn, %{"bills" => bills, "email" => email, "fullName" => name}) do
+    IO.inspect "1"
     bill = Enum.reduce(bills, %{
         "amount" => Money.new(0, :MYR).amount,
         "description" => "Bills:"
@@ -118,10 +119,10 @@ defmodule BayaqWeb.BillController do
       
     
     end)
-
+    IO.inspect "2"
     charge_amount = 50 * length(bills)
     bill_amount = Money.add(Money.new(charge_amount, :MYR), Money.new(Map.get(bill, "amount"), :MYR)).amount
-
+    IO.inspect "3"
     default_map = %{
       "collection_id" => Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_collection],
       "amount" => bill_amount,
@@ -133,7 +134,7 @@ defmodule BayaqWeb.BillController do
     }
 
     body = Poison.encode!(default_map)
-
+    IO.inspect "4"
     {:ok, %HTTPoison.Response{status_code: 200, body: body}} = HTTPoison.post Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_api_key], body, %{"Content-type" => "application/json"}
     body = Poison.decode!(body)
     stripe_id =  Map.get(body, "id")
