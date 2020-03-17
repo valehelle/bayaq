@@ -92,52 +92,54 @@ defmodule BayaqWeb.BillController do
     {:error}
   end
 
-  def pay_bills(conn, %{"bills" => bills, "email" => email}) do
-    {index, bills_map} = Enum.reduce(bills, %{"index" => 0}, fn bill, acc -> 
-      
-      index = Map.get(acc, "index")
+  def pay_bills(conn, %{"bills" => bills, "email" => email, "fullName" => name}) do
+    bill = Enum.reduce(bills, %{
+        "amount" => Money.new(0, :MYR).amount,
+        "description" => "Bills:"
+    }, fn bill, acc -> 
+     
       amount = Map.get(bill, "amount")
-      money = Money.new(amount, :MYR)
+      current_amount = Map.get(acc, "amount")
+      new_amount = Money.add(Money.new(amount, :MYR), Money.new(current_amount, :MYR)) 
+      
+      company_name = Map.get(bill, "company_name")
+      
+      current_description = Map.get(acc, "description")
+      new_description = "#{current_description} \n #{company_name} - RM #{Money.to_string(Money.new(amount, :MYR))}"
+
+      new_amount = Money.add(Money.new(amount, :MYR), Money.new(current_amount, :MYR)) 
 
 
       bill = %{
-        "name" => Map.get(bill, "companyName"),
-        "description" => "Account Number : #{Map.get(bill, "ref1")}",
-        "amount" => money.amount,
-        "currency" => "myr",
-        "quantity" => 1,
+        "amount" => new_amount.amount,
+        "description" => new_description
       }
 
-      add_bill = Map.put_new(acc, index, bill) 
-      new_index = index + 1
-      Map.put(add_bill, "index", new_index) 
-    end) |> Map.pop("index")
+      
+    
+    end)
 
     charge_amount = 50 * length(bills)
-    bill_charge = %{
-        "name" => "Bayaq",
-        "description" => "Service Fee",
-        "amount" => Money.new(charge_amount, :MYR).amount,
-        "currency" => "myr",
-        "quantity" => 1,
-    }
-    bills_map = Map.put_new(bills_map, index, bill_charge) 
+    bill_amount = Money.add(Money.new(charge_amount, :MYR), Money.new(Map.get(bill, "amount"), :MYR)).amount
 
     default_map = %{
-      "customer_email" => email,
-      "payment_method_types" => ["card"],
-      "success_url" => "https://bayaq.netlify.com?success=true",
-      "cancel_url" => "https://bayaq.netlify.com"
+      "collection_id" => "6lh4c0br",
+      "amount" => bill_amount,
+      "email" => email,
+      "name" => name,
+      "description" => Map.get(bill, "description"),
+      "redirect_url" => "https://bayaq.netlify.com",
+      "callback_url" => "boiling-island-04628.herokuapp.com/hooks"
     }
 
-    stripe_param = Map.merge(default_map, %{"line_items" => bills_map})
-    req_body = Plug.Conn.Query.encode(stripe_param)
-    {:ok, %HTTPoison.Response{status_code: 200, body: body}} = HTTPoison.post "https://api.stripe.com/v1/checkout/sessions", req_body, %{"Content-type" => "application/x-www-form-urlencoded", "Authorization" => "Bearer #{Application.get_env(:bayaq, Bayaq.Repo)[:stripe_api_key]}"}
+    body = Poison.encode!(default_map)
+
+    {:ok, %HTTPoison.Response{status_code: 200, body: body}} = HTTPoison.post "https://#{Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_api_key]}:@billplz-sandbox.com/api/v3/bills", body, %{"Content-type" => "application/json"}
     body = Poison.decode!(body)
     stripe_id =  Map.get(body, "id")
     invoice_param = %{"stripe_id" => stripe_id, "bills" => bills, "email" => email}
     {:ok, invoice} = Invoices.create_invoice(invoice_param)
-    invoice = %{"id" => invoice.id, "stripe_id" => invoice.stripe_id}
+    invoice = %{"id" => invoice.id, "url" => Map.get(body, "url")}
     render(conn, "show_invoice.json", invoice: invoice)
   end
 

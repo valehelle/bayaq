@@ -28,7 +28,6 @@ defmodule BayaqWeb.Endpoint do
 
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
-    body_reader: {BayaqWeb.CacheBodyReader, :read_body, []},
     pass: ["*/*"],
     json_decoder: Phoenix.json_library()
 
@@ -46,16 +45,3 @@ defmodule BayaqWeb.Endpoint do
   plug BayaqWeb.Router
 end
 
-
-defmodule BayaqWeb.CacheBodyReader do
-  def read_body(conn, opts) do
-    {:ok, body, conn} = Plug.Conn.read_body(conn, opts)
-    body = [body | conn.private[:raw_body] || []]
-    conn = Plug.Conn.put_private(conn, :raw_body, body)
-    {:ok, body, conn}
-  end
-
-  def read_cached_body(conn) do
-    conn.private[:raw_body]
-  end
-end

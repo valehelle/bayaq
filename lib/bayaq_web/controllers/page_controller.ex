@@ -19,15 +19,29 @@ defmodule BayaqWeb.PageController do
   end
 
   def hooks(conn, params) do
-    %{"type" => event_type} = params
-    case event_type do
-      "checkout.session.completed" ->
-      payment_succeed(conn,params)
-      _ -> send_resp(conn, 200, "")
-    end    
+    bill_state = Map.get(params, "paid")
+    case bill_state do
+      "true" -> 
+        {bill_plz_signature, bill_plz_params} = Map.pop(params, "x_signature")
+        params_string = Enum.map(bill_plz_params, fn {k, v} -> "#{k}#{v}" end) 
+          |> Enum.sort 
+          |> Enum.reduce(fn x, acc -> "#{acc}|#{x}" end)
+
+        expected_signature =  :crypto.hmac(:sha256, Application.get_env(:bayaq, Bayaq.Repo)[:signature], params_string)
+          |> Base.encode16(case: :lower)
+        
+        case SecureCompare.compare(bill_plz_signature, expected_signature) do
+          true ->
+          invoice = Invoices.invoice_paid(params)
+          send_push_notification(invoice.id)
+          send_resp(conn, 200, "")
+          false -> send_resp(conn, 200, "")
+        end
+      "false" -> send_resp(conn, 200, "")
+    end
   end
 
-  def payment_succeed(conn, params) do
+  def payment_succeed_stripe(conn, params) do
     stripe_signature = conn |> get_req_header("stripe-signature") |> List.first |> String.split(",")
     [timestamp | tail] = stripe_signature
     timestamp = String.split(timestamp, "=") |> List.last

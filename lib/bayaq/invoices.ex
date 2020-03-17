@@ -69,7 +69,7 @@ defmodule Bayaq.Invoices do
     {:ok, invoice}
   end
 
-  def invoice_paid(%{"data" => %{"object" => %{"id" => stripe_id}}} = params) do
+  def invoice_paid(%{"id" => stripe_id} = params) do
     query = from i in Invoice,
           where: i.stripe_id == ^stripe_id
     invoice = Repo.one(query)
