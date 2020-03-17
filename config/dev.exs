@@ -74,7 +74,7 @@ config :bayaq, Bayaq.Repo,
   hostname: "localhost",
   stripe_key: "whsec_OSTXti38qobS4uTAAOC7LSb2XIZndtJb",
   stripe_api_key: "sk_test_EtxDujuNveQdHfyb6AYsvIGw004jQrHgCK",
-  bayaq_api_key: "9900286e-3c1c-435a-a63a-9deb56c3a898",
+  bayaq_api_key: "https://9900286e-3c1c-435a-a63a-9deb56c3a898:@billplz-sandbox.com/api/v3/bills",
   bayaq_collection: "6lh4c0br",
   signature: "S-YEsG3H1abCjrGmFoIGntVg",
   pool_size: 10

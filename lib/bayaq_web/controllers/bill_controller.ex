@@ -134,7 +134,7 @@ defmodule BayaqWeb.BillController do
 
     body = Poison.encode!(default_map)
 
-    {:ok, %HTTPoison.Response{status_code: 200, body: body}} = HTTPoison.post "https://#{Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_api_key]}:@billplz-sandbox.com/api/v3/bills", body, %{"Content-type" => "application/json"}
+    {:ok, %HTTPoison.Response{status_code: 200, body: body}} = HTTPoison.post Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_api_key], body, %{"Content-type" => "application/json"}
     body = Poison.decode!(body)
     stripe_id =  Map.get(body, "id")
     invoice_param = %{"stripe_id" => stripe_id, "bills" => bills, "email" => email}
