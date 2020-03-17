@@ -102,7 +102,7 @@ defmodule BayaqWeb.BillController do
       current_amount = Map.get(acc, "amount")
       new_amount = Money.add(Money.new(amount, :MYR), Money.new(current_amount, :MYR)) 
       
-      company_name = Map.get(bill, "company_name")
+      company_name = Map.get(bill, "companyName")
       
       current_description = Map.get(acc, "description")
       new_description = "#{current_description} \n #{company_name} - RM #{Money.to_string(Money.new(amount, :MYR))}"
