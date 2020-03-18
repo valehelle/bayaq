@@ -127,7 +127,7 @@ defmodule BayaqWeb.BillController do
       "name" => name,
       "description" => Map.get(bill, "description"),
       "redirect_url" => "https://bayaq.netlify.com",
-      "callback_url" => "boiling-island-04628.herokuapp.com/hooks"
+      "callback_url" => "https://boiling-island-04628.herokuapp.com/hooks"
     }
 
     body = Poison.encode!(default_map)
