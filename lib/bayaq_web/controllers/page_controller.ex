@@ -22,7 +22,6 @@ defmodule BayaqWeb.PageController do
     bill_state = Map.get(params, "paid")
     case bill_state do
       "true" -> 
-        IO.inspect "true bill state"
         {bill_plz_signature, bill_plz_params} = Map.pop(params, "x_signature")
         params_string = Enum.map(bill_plz_params, fn {k, v} -> "#{k}#{v}" end) 
           |> Enum.sort 
@@ -33,16 +32,12 @@ defmodule BayaqWeb.PageController do
         
         case SecureCompare.compare(bill_plz_signature, expected_signature) do
           true ->
-          IO.inspect "true"
           invoice = Invoices.invoice_paid(params)
-          IO.inspect invoice
           send_push_notification(invoice.id)
           send_resp(conn, 200, "")
           false -> 
-          IO.inspect "false"
           send_resp(conn, 200, "")
         end
-        IO.inspect "false bill state"
       "false" -> send_resp(conn, 200, "")
     end
   end
