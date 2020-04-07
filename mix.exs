@@ -48,7 +48,10 @@ defmodule Bayaq.MixProject do
       {:floki, "~> 0.24.0"},
       {:money, "~> 1.4"},
       {:cors_plug, "~> 1.5"},
-      {:secure_compare, "~> 0.1.0"}
+      {:secure_compare, "~> 0.1.0"},
+      {:guardian, "~> 1.0"},
+      {:comeonin, "~> 4.0"},
+      {:bcrypt_elixir, "~> 0.12"},
     ]
   end
 

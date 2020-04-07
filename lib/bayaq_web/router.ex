@@ -21,6 +21,14 @@ defmodule BayaqWeb.Router do
     get "/sdfasdfjlkjskasdfsdf", PageController, :invoice
     
   end
+
+  pipeline :auth do
+    plug Bayaq.Accounts.Pipeline
+  end
+
+  pipeline :ensure_auth do
+    plug Guardian.Plug.EnsureAuthenticated, error_handler: BayaqWeb.UserController
+  end
   
   scope "/", BayaqWeb do
     pipe_through :api
@@ -34,6 +42,13 @@ defmodule BayaqWeb.Router do
     options "/bill/amount", BillController, :options
     get "/wakeup", BillController, :wakeup
     options "/wakeup", BillController, :options
+    post "/users/sign_up", UserController, :register_user
+  end
+
+    scope "/", BayaqWeb do
+    pipe_through [:api, :auth, :ensure_auth]
+    get "/invoice", InvoiceController, :index
+
   end
 
   # Other scopes may use custom stacks.
