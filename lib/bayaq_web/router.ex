@@ -49,6 +49,7 @@ defmodule BayaqWeb.Router do
     scope "/", BayaqWeb do
     pipe_through [:api, :auth, :ensure_auth]
     get "/invoice", InvoiceController, :index
+    options "/invoice", InvoiceController, :options
     post "/pay_bills", BillController, :pay_bills
     options "/pay_bills", BillController, :options
     post "/bills", UserController, :create_bill
