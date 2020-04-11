@@ -5,6 +5,7 @@ defmodule Bayaq.Repo.Migrations.CreateUsers do
     create table(:users) do
       add :email, :string
       add :password, :string
+      add :full_name, :string
 
       timestamps()
     end

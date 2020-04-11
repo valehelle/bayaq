@@ -3,12 +3,15 @@ defmodule Bayaq.Accounts.User do
   import Ecto.Changeset
   alias Bayaq.Invoices.Invoice
   alias Comeonin.Bcrypt
+  alias Bayaq.Accounts.Bill
 
 
   schema "users" do
     field :email, :string
     field :password, :string
+    field :full_name, :string
     has_many :invoices, Invoice
+    has_many :bills, Bill
     timestamps()
   end
 
@@ -16,8 +19,8 @@ defmodule Bayaq.Accounts.User do
     @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :password])
-    |> validate_required([:email, :password])
+    |> cast(attrs, [:email, :password, :full_name])
+    |> validate_required([:email, :password, :full_name])
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:email, [name: :users_email_index])
     |> put_pass_hash()

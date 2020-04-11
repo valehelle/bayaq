@@ -33,8 +33,6 @@ defmodule BayaqWeb.Router do
   scope "/", BayaqWeb do
     pipe_through :api
     get "/tnb/:account_number", BillController, :get_tnb_balance
-    post "/pay_bills", BillController, :pay_bills
-    options "/pay_bills", BillController, :options
     options "/hooks", BillController, :options
     post "/hooks", PageController, :hooks
     get "/indah_water/:account_number", BillController, :get_indah_water_balance
@@ -43,11 +41,21 @@ defmodule BayaqWeb.Router do
     get "/wakeup", BillController, :wakeup
     options "/wakeup", BillController, :options
     post "/users/sign_up", UserController, :register_user
+    options "/users/sign_up", UserController, :options
+    post "/users/sign_in", UserController, :login
+    options "/users/sign_in", UserController, :options
   end
 
     scope "/", BayaqWeb do
     pipe_through [:api, :auth, :ensure_auth]
     get "/invoice", InvoiceController, :index
+    post "/pay_bills", BillController, :pay_bills
+    options "/pay_bills", BillController, :options
+    post "/bills", UserController, :create_bill
+    get "/bills", UserController, :get_bills
+    put "/bills", UserController, :update_bill
+    delete "/bills", UserController, :delete_bill
+    options "/bills", UserController, :options
 
   end
 

@@ -22,6 +22,14 @@ defmodule Bayaq.Invoices do
     Repo.all(Invoice)
   end
 
+  def get_invoices(user_id) do
+      query = from i in Invoice,
+
+            where: i.user_id == ^user_id,
+            preload: [:bills]
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single invoice.
 
@@ -56,9 +64,9 @@ defmodule Bayaq.Invoices do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_invoice(%{"stripe_id" => stripe_id, "bills" => bills, "email" => email}) do
+  def create_invoice(%{"stripe_id" => stripe_id, "bills" => bills, "email" => email, "user_id" => user_id}) do
     {:ok, invoice} = %Invoice{}
-                      |> Invoice.changeset(%{"stripe_id" => stripe_id})
+                      |> Invoice.changeset(%{"stripe_id" => stripe_id, "user_id" => user_id})
                       |> Repo.insert()
 
     for bill <- bills do

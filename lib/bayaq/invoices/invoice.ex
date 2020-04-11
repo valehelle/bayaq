@@ -15,7 +15,7 @@ defmodule Bayaq.Invoices.Invoice do
   @doc false
   def changeset(invoice, attrs) do
     invoice
-    |> cast(attrs, [:status, :stripe_id])
-    |> validate_required([:status, :stripe_id])
+    |> cast(attrs, [:status, :stripe_id, :user_id])
+    |> validate_required([:status, :stripe_id, :user_id])
   end
 end

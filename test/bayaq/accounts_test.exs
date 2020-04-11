@@ -63,4 +63,75 @@ defmodule Bayaq.AccountsTest do
       assert %Ecto.Changeset{} = Accounts.change_user(user)
     end
   end
+
+  describe "bills" do
+    alias Bayaq.Accounts.Bill
+
+    @valid_attrs %{amount: 42, biller_code: "some biller_code", company_name: "some company_name", ref1: "some ref1", ref2: "some ref2", type: "some type", user_id: "some user_id"}
+    @update_attrs %{amount: 43, biller_code: "some updated biller_code", company_name: "some updated company_name", ref1: "some updated ref1", ref2: "some updated ref2", type: "some updated type", user_id: "some updated user_id"}
+    @invalid_attrs %{amount: nil, biller_code: nil, company_name: nil, ref1: nil, ref2: nil, type: nil, user_id: nil}
+
+    def bill_fixture(attrs \\ %{}) do
+      {:ok, bill} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_bill()
+
+      bill
+    end
+
+    test "list_bills/0 returns all bills" do
+      bill = bill_fixture()
+      assert Accounts.list_bills() == [bill]
+    end
+
+    test "get_bill!/1 returns the bill with given id" do
+      bill = bill_fixture()
+      assert Accounts.get_bill!(bill.id) == bill
+    end
+
+    test "create_bill/1 with valid data creates a bill" do
+      assert {:ok, %Bill{} = bill} = Accounts.create_bill(@valid_attrs)
+      assert bill.amount == 42
+      assert bill.biller_code == "some biller_code"
+      assert bill.company_name == "some company_name"
+      assert bill.ref1 == "some ref1"
+      assert bill.ref2 == "some ref2"
+      assert bill.type == "some type"
+      assert bill.user_id == "some user_id"
+    end
+
+    test "create_bill/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_bill(@invalid_attrs)
+    end
+
+    test "update_bill/2 with valid data updates the bill" do
+      bill = bill_fixture()
+      assert {:ok, %Bill{} = bill} = Accounts.update_bill(bill, @update_attrs)
+      assert bill.amount == 43
+      assert bill.biller_code == "some updated biller_code"
+      assert bill.company_name == "some updated company_name"
+      assert bill.ref1 == "some updated ref1"
+      assert bill.ref2 == "some updated ref2"
+      assert bill.type == "some updated type"
+      assert bill.user_id == "some updated user_id"
+    end
+
+    test "update_bill/2 with invalid data returns error changeset" do
+      bill = bill_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_bill(bill, @invalid_attrs)
+      assert bill == Accounts.get_bill!(bill.id)
+    end
+
+    test "delete_bill/1 deletes the bill" do
+      bill = bill_fixture()
+      assert {:ok, %Bill{}} = Accounts.delete_bill(bill)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_bill!(bill.id) end
+    end
+
+    test "change_bill/1 returns a bill changeset" do
+      bill = bill_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_bill(bill)
+    end
+  end
 end
