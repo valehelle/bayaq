@@ -1,4 +1,4 @@
-defmodule Bayaq.Repo.Migrations.CreateBills do
+defmodule Bayaq.Repo.Migrations.CreateUserBills do
   use Ecto.Migration
 
   def change do

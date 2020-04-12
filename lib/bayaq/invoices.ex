@@ -64,9 +64,9 @@ defmodule Bayaq.Invoices do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_invoice(%{"stripe_id" => stripe_id, "bills" => bills, "email" => email, "user_id" => user_id}) do
+  def create_invoice(%{"stripe_id" => stripe_id, "bills" => bills, "email" => email, "user_id" => user_id, "amount" => amount}) do
     {:ok, invoice} = %Invoice{}
-                      |> Invoice.changeset(%{"stripe_id" => stripe_id, "user_id" => user_id})
+                      |> Invoice.changeset(%{"stripe_id" => stripe_id, "user_id" => user_id, "amount" => amount})
                       |> Repo.insert()
 
     for bill <- bills do

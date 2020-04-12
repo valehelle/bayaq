@@ -14,7 +14,7 @@ defmodule BayaqWeb.InvoiceController do
 
   def invoice_json(invoice) do
     bills = Enum.map(invoice.bills, &bill_json/1)
-    %{ref_id: invoice.stripe_id, bills: bills, paid_at: invoice.updated_at}
+    %{ref_id: invoice.stripe_id, bills: bills, paid_at: invoice.updated_at, amount: invoice.amount.amount}
   end
 
   def bill_json(bill) do
