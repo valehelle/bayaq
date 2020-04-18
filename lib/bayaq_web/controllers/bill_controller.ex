@@ -130,7 +130,7 @@ defmodule BayaqWeb.BillController do
       "email" => email,
       "name" => name,
       "description" => Map.get(bill, "description"),
-      "redirect_url" => "https://bayaq.netlify.com",
+      "redirect_url" => "https://www.bayaqapp.com",
       "callback_url" => "https://boiling-island-04628.herokuapp.com/hooks"
     }
 
