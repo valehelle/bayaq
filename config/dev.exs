@@ -77,4 +77,6 @@ config :bayaq, Bayaq.Repo,
   bayaq_api_key: "https://9900286e-3c1c-435a-a63a-9deb56c3a898:@billplz-sandbox.com/api/v3/bills",
   bayaq_collection: "6lh4c0br",
   signature: "S-YEsG3H1abCjrGmFoIGntVg",
+  bayaq_url: "http://localhost:19006",
+  bayaq_backend: "http://localhost:3000/hooks",
   pool_size: 10

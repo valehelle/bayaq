@@ -49,7 +49,7 @@ defmodule Bayaq.Invoices do
   def get_invoice_paid() do
     query = from i in Invoice,
             where: i.status == "PAYMENT_MADE",
-            preload: [:bills]
+            preload: [:bills, :user]
     Repo.all(query)
   end
   @doc """

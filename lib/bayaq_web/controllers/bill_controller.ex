@@ -130,8 +130,8 @@ defmodule BayaqWeb.BillController do
       "email" => email,
       "name" => name,
       "description" => Map.get(bill, "description"),
-      "redirect_url" => "https://www.bayaqapp.com",
-      "callback_url" => "https://boiling-island-04628.herokuapp.com/hooks"
+      "redirect_url" => Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_url],
+      "callback_url" => Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_backend]
     }
 
     body = Poison.encode!(default_map)
