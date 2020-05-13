@@ -20,7 +20,6 @@ defmodule BayaqWeb.Router do
     get "/", PageController, :index
     get "/login", UserController, :index
     post "/login", UserController, :login_web
-    get "/sdfasdfjlkjskasdfsdf", PageController, :invoice
     
   end
 
