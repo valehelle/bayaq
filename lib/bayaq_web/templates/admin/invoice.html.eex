@@ -1,0 +1,15 @@
+<%= for invoice <- @invoices do %>
+  <h3>Name: <%= invoice.user.full_name %> </h3>
+  <h3>Email: <%= invoice.user.email %> </h3>
+  <h3>Invoice Id: <%= invoice.id %> </h3>
+  <h3>Invoice Status: <%= invoice.status %> </h3>
+  <%= for bill <- invoice.bills do %>
+  <div style = "background-color: lightgrey">
+    <h5>Company Name: <%= bill.company_name %></h5>
+    <h5>Ref 1: <%= bill.ref1 %></h5>
+    <h5>Ref 2: <%= bill.ref2 %></h5>
+    <h5>Amount: <%= bill.amount %></h5>
+  </div>
+  <% end %>
+  <hr>
+<% end %>

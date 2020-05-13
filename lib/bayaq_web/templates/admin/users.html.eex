@@ -1,0 +1,8 @@
+<h3>Count: <%= @count %> </h3>
+
+<%= for user <- @users do %>
+  <h3>Name: <%= user.full_name %> </h3>
+  <h3>Email: <%= user.email %> </h3>
+  <h3>Created at: <%= user.inserted_at %> </h3>
+  <hr>
+<% end %>

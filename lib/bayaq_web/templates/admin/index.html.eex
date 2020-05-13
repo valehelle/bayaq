@@ -1,0 +1,11 @@
+<div class = "container" >
+    <div class="row" >
+        <div class = "col-sm col-md-8 offset-md-2" style = "padding-top:30px; padding-bottom: 0px; border-left: 1px solid; color: rgba(0,0,0,.1);">
+          <h2 style = "color:black">Admin</h2>
+           <%= link("User", to: Routes.admin_path(@conn, :users), class: "btn btn-outline-light my-2 my-sm-0") %>
+           <%= link("Bills", to: Routes.admin_path(@conn, :bills), class: "btn btn-outline-light my-2 my-sm-0") %>
+           <%= link("Paid Bills", to: Routes.admin_path(@conn, :paid_bills), class: "btn btn-outline-light my-2 my-sm-0") %>
+
+        </div>
+    </div>
+</div>

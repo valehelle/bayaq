@@ -1,0 +1,8 @@
+<%= for bill <- @bills do %>
+  <h3>Name: <%= bill.user.full_name %> </h3>
+  <h3>Email: <%= bill.user.email %> </h3>
+  <h3>Company Name: <%= bill.company_name %> </h3>
+  <h3>Amount: <%= bill.amount %> </h3>
+  <h3>inserted_at: <%= bill.inserted_at %> </h3>
+  <hr>
+<% end %>

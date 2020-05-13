@@ -31,6 +31,27 @@ defmodule BayaqWeb.UserController do
     send_resp(conn, 400, "")
   end
 
+
+  def index(conn, params) do
+    changeset = Accounts.change_user(%User{})
+    conn
+      |> render("index.html", changeset: changeset, action: Routes.user_path(conn, :login_web), error: "none")
+  end
+
+  def login_web(conn, %{"user" => %{"email" => email, "password" => password} = params}) do  
+    case email do
+    "hazmiirfan92@gmail.com" ->
+      Accounts.authenticate_user(email, password)
+      |> login_reply_web(conn)
+    _ -> redirect(conn, to: Routes.user_path(conn, :index))
+    end
+  end
+  defp login_reply_web({:ok, user}, conn) do
+    conn
+    |> Guardian.Plug.sign_in(user)
+    |> redirect( to: Routes.admin_path(conn, :index))
+  end
+
   defp login_reply({:ok, user}, conn) do
     conn = Guardian.Plug.sign_in(conn, user)
     token = to_string(Guardian.Plug.current_token(conn))

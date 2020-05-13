@@ -19,7 +19,9 @@ defmodule Bayaq.Accounts do
 
   """
   def list_users do
-    Repo.all(User)
+    User
+    |> reverse_order
+    |> Repo.all()
   end
 
   @doc """
@@ -142,7 +144,12 @@ defmodule Bayaq.Accounts do
 
   """
   def list_bills do
-    Repo.all(Bill)
+    query = from b in Bill,
+           preload: [:user] 
+
+    query
+    |> reverse_order
+    |> Repo.all()
   end
 
   @doc """

@@ -18,6 +18,8 @@ defmodule BayaqWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/login", UserController, :index
+    post "/login", UserController, :login_web
     get "/sdfasdfjlkjskasdfsdf", PageController, :invoice
     
   end
@@ -57,6 +59,16 @@ defmodule BayaqWeb.Router do
     put "/bills", UserController, :update_bill
     delete "/bills", UserController, :delete_bill
     options "/bills", UserController, :options
+
+  end
+
+  scope "/admin", BayaqWeb do
+    pipe_through [:browser, :auth, :ensure_auth]
+    get "/dashboard", AdminController, :index
+    get "/users", AdminController, :users
+    get "/bills", AdminController, :bills
+    get "/paid_bills", AdminController, :paid_bills
+
 
   end
 

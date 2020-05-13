@@ -1,0 +1,29 @@
+<div class = "container" >
+    <div class="row" >
+        <div class = "col-sm col-md-8 offset-md-2" style = "padding-top:30px; padding-bottom: 0px; border-left: 1px solid; color: rgba(0,0,0,.1);">
+          <h2 style = "color:black">Login</h2>
+          <%= if @error != "none" do %>
+            <h6 style = "color: black;"><%= @error %></h6>
+          <% end %>
+          <%= form_for @changeset, @action, fn f -> %>
+            <div class="form-group" style = "color:black">
+              <%= label f, :email, class: "control-label" %>
+              <%= text_input f, :email, class: "form-control" %>
+              <%= error_tag f, :email %>
+            </div>
+
+            <div class="form-group" style = "color:black">
+              <%= label f, :password, class: "control-label" %>
+              <%= password_input f, :password, class: "form-control" %>
+              <%= error_tag f, :password %>
+            </div>
+
+            <div class="form-group" style = "text-align:right;">
+              <%= submit "Submit", class: "btn btn-primary" %>
+            </div>
+            <% end %>
+          <hr style = "margin-left: -15px; margin-right: -15px;  margin-bottom:0px; margin-top: 0px;"/>
+
+        </div>
+    </div>
+</div>
