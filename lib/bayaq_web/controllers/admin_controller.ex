@@ -27,7 +27,6 @@ defmodule BayaqWeb.AdminController do
     case user.email == "hazmiirfan92@gmail.com" do
       true -> 
       bills = Accounts.list_bills()
-      IO.inspect bills
       render(conn, "bills.html", bills: bills)
       false -> redirect(conn, to: Routes.user_path(conn, :index))
     end
