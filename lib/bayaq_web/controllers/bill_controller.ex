@@ -152,8 +152,9 @@ defmodule BayaqWeb.BillController do
           }
           try do
             {:ok, %HTTPoison.Response{status_code: 200, body: body}} = HTTPoison.get "https://sebcares.sarawakenergy.com.my/SarawakEnergy3/api/adapters/Subscription/getSubscriptionDetail?params=%5B%7B%22LOCALE%22%3A%22en%22%2C%22CONTRACT_ACC_NO%22%3A%22#{account_number}%22%7D%5D", headers, ssl: [{:versions, [:'tlsv1.2']}]
-              amount = Poison.decode!(body) 
+                amount = Poison.decode!(body) 
                       |> Map.get("CURRENT_BILL_AMT_DUE")
+               {amount, _} = Float.to_string(amount, decimals: 2)
                       |> String.replace(~r/\.|\n|RM|\*/,"", global: true)
                       |> Integer.parse
               if amount != nil do
@@ -166,7 +167,7 @@ defmodule BayaqWeb.BillController do
                 {:error}
               end
           rescue
-            e -> {:error}
+            e -> IO.inspect e
           end    
   end
 
