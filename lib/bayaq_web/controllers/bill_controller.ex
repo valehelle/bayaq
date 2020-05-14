@@ -145,14 +145,39 @@ defmodule BayaqWeb.BillController do
     render(conn, "show_invoice.json", invoice: invoice)
   end
 
+  def get_sesco_balance(conn, %{"account_number" => account_number}) do
+      token = "eyJhbGciOiJSUzI1NiIsImp3ayI6eyJrdHkiOiJSU0EiLCJlIjoiQVFBQiIsImtpZCI6ImQ0MTcxODBmLThmNWEtNGFhMC05NDAxLWU2MWMzZDcyZWM1OCIsIm4iOiJBTTBEZDd4QWR2NkgteWdMN3I4cUNMZEUtM0kya2s0NXpnWnREZF9xczhmdm5ZZmRpcVRTVjRfMnQ2T0dHOENWNUNlNDFQTXBJd21MNDEwWDlJWm52aHhvWWlGY01TYU9lSXFvZS1ySkEwdVp1dzJySGhYWjNXVkNlS2V6UlZjQ09Zc1FOLW1RSzBtZno1XzNvLWV2MFVZd1hrU093QkJsMUVocUl3VkR3T2llZzJKTUdsMEVYc1BaZmtOWkktSFU0b01paS1Uck5MelJXa01tTHZtMDloTDV6b3NVTkExNXZlQ0twaDJXcG1TbTJTNjFuRGhIN2dMRW95bURuVEVqUFk1QW9oMmluSS0zNlJHWVZNVVViTzQ2Q3JOVVl1SW9iT2lYbEx6QklodUlDcGZWZHhUX3g3c3RLWDVDOUJmTVRCNEdrT0hQNWNVdjdOejFkRGhJUHU4PSJ9fQ.eyJpc3MiOiJjb20uaWJtLm1mcCIsInN1YiI6ImQ0MTcxODBmLThmNWEtNGFhMC05NDAxLWU2MWMzZDcyZWM1OCIsImF1ZCI6ImNvbS5pYm0ubWZwIiwiZXhwIjoxNTg5NDc2ODQ4MzEwLCJzY29wZSI6IkN1c3RvbWVyU2VjdXJpdHlUZXN0IFJlZ2lzdGVyZWRDbGllbnQifQ.GL8HuXBZbxDeMoBgJNblbFlAv0sStL0FdCFqfVr0yswO6AYxWDXbz-Gek9aUt704-z4cPX9D_AqSlhlTAlgyhNtxsfKDQCcCepjnOJ349ulL37uNIAGOEUh4uSe9IAYvZ4oPMO9yw9ys3P32awwqKhGgkJl6Hcrt-p9n8pUj4j_ABau3l9xkZC1mjXDmqVYXTYAhciUYdYTon5is2sLrGPS5TlUgGKCr2FTHhkKz-09Qhij82ohgR1SrjRLV8mWlR46yWdi554KKzPMIssCEhJcKsz8qOwzPrOJj6UmL2ZGBJJtOb2-IsVIPYwrbswJiDVWj9EqnVm4B_HShyvun8w"
+          headers = %{
+            "Authorization" => "Bearer #{token}"
+          }
+          try do
+            {:ok, %HTTPoison.Response{status_code: 200, body: body}} = HTTPoison.get "https://sebcares.sarawakenergy.com.my/SarawakEnergy3/api/adapters/Subscription/getSubscriptionDetail?params=%5B%7B%22LOCALE%22%3A%22en%22%2C%22CONTRACT_ACC_NO%22%3A%22#{account_number}%22%7D%5D", headers, ssl: [{:versions, [:'tlsv1.2']}]
+              amount = Poison.decode!(body) |> Map.get("CURRENT_BILL_AMT_DUE")
+              if amount != nil do
+                bill = %{
+                  "description" => "",
+                  "amount" => amount,
+                }
+                render(conn, "show.json", bill: bill)
+              else
+                {:error}
+              end
+          rescue
+            e -> {:error}
+          end    
+  end
+
   def get_bill_amount(conn, %{"billerCode" => biller_code, "account" => account_number}) do
     case biller_code do
       "5454" -> get_tnb_balance(conn, %{"account_number" => account_number})
       "68502" -> get_indah_water_balance(conn, %{"account_number" => account_number})
       "4200" -> get_air_selangor(conn, %{"account_number" => account_number})
+      "40386" -> get_sesco_balance(conn, %{"account_number" => account_number})
     end
   end
 
-  
+
+
+
 
 end
