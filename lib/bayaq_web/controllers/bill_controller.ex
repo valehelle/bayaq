@@ -176,7 +176,6 @@ defmodule BayaqWeb.BillController do
       "5454" -> get_tnb_balance(conn, %{"account_number" => account_number})
       "68502" -> get_indah_water_balance(conn, %{"account_number" => account_number})
       "4200" -> get_air_selangor(conn, %{"account_number" => account_number})
-      "40386" -> get_sesco_balance(conn, %{"account_number" => account_number})
     end
   end
 
