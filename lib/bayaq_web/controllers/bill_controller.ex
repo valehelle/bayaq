@@ -92,8 +92,8 @@ defmodule BayaqWeb.BillController do
     {:error}
   end
 
-  defp get_bank_code(bank_name) do
-    case bank_name do
+  defp get_bank_code(bank_code) do
+    case bank_code do
       "MB2U0227" -> "MB2U0227"
       "BCBB0235" -> "BCBB0235"
       "RHB0218" -> "RHB0218"
@@ -118,7 +118,7 @@ defmodule BayaqWeb.BillController do
 
   def pay_bills(conn, %{"bills" => bills} = params) do
     user = Guardian.Plug.current_resource(conn)
-    bank_name = Map.get(params, "bank_code") 
+    bank_code = Map.get(params, "bank_code") 
     email = user.email
     name = user.full_name
     bill = Enum.reduce(bills, %{
