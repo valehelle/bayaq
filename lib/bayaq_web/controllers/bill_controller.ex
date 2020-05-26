@@ -118,7 +118,7 @@ defmodule BayaqWeb.BillController do
 
   def pay_bills(conn, %{"bills" => bills} = params) do
     user = Guardian.Plug.current_resource(conn)
-    bank_name = Map.get(params, "bank_name") 
+    bank_name = Map.get(params, "bank_code") 
     email = user.email
     name = user.full_name
     bill = Enum.reduce(bills, %{
@@ -153,7 +153,7 @@ defmodule BayaqWeb.BillController do
         "description" => description_with_service
     }
     bill_amount = Money.add(Money.new(charge_amount, :MYR), Money.new(Map.get(bill, "amount"), :MYR)).amount
-    bank_code = get_bank_code(bank_name)
+    bank_code = get_bank_code(bank_code)
     default_map = %{
       "collection_id" => Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_collection],
       "amount" => bill_amount,
