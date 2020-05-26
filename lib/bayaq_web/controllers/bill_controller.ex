@@ -122,7 +122,15 @@ defmodule BayaqWeb.BillController do
       
     
     end)
+
+
     charge_amount = 50 * length(bills)
+
+    description_with_service = "#{Map.get(bill, "description")} \n Service Fee - RM #{Money.to_string(Money.new(charge_amount, :MYR))}"
+    bill = %{
+        "amount" => Map.get(bill, "amount"),
+        "description" => description_with_service
+    }
     bill_amount = Money.add(Money.new(charge_amount, :MYR), Money.new(Map.get(bill, "amount"), :MYR)).amount
     default_map = %{
       "collection_id" => Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_collection],
