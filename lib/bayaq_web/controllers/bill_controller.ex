@@ -112,12 +112,13 @@ defmodule BayaqWeb.BillController do
       "SCB0216" -> "SCB0216"
       "UOB0226" -> "UOB0226"
       "MBB0228" -> "MBB0228"
-      _ -> "MB2U0227"
+      _ -> "EMPTY"
     end
   end
 
-  def pay_bills(conn, %{"bank_name" => bank_name, "bills" => bills}) do
+  def pay_bills(conn, %{"bills" => bills} = params) do
     user = Guardian.Plug.current_resource(conn)
+    bank_name = Map.get(params, "bank_name") 
     email = user.email
     name = user.full_name
     bill = Enum.reduce(bills, %{
