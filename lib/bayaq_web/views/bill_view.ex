@@ -13,6 +13,9 @@ defmodule BayaqWeb.BillView do
   def render("show_invoice.json", %{invoice: invoice}) do
     invoice
   end
+  def render("show_banks.json", %{banks: banks}) do
+    banks
+  end
 
   def render("bill.json", bill) do
     bill

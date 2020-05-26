@@ -119,11 +119,8 @@ defmodule BayaqWeb.BillController do
         "description" => new_description
       }
 
-      
-    
+  
     end)
-
-
     charge_amount = 50 * length(bills)
 
     description_with_service = "#{Map.get(bill, "description")} \n Service Fee - RM #{Money.to_string(Money.new(charge_amount, :MYR))}"
@@ -188,7 +185,14 @@ defmodule BayaqWeb.BillController do
   end
 
 
+  def get_bank_list(conn, _params) do
+    credential = Application.get_env(:bayaq, Bayaq.Repo)[:bill_plz_username] |> Base.encode64()
+    headers = ["Authorization": "Basic #{credential}"]
+    {:ok, %HTTPoison.Response{status_code: 200, body: body}} =  HTTPoison.get Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_api_bank], headers
+    banks = Poison.decode!(body) 
+    render(conn, "show_banks.json", banks: banks)
 
+  end
 
 
 end

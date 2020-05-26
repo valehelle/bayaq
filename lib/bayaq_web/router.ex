@@ -58,7 +58,8 @@ defmodule BayaqWeb.Router do
     put "/bills", UserController, :update_bill
     delete "/bills", UserController, :delete_bill
     options "/bills", UserController, :options
-
+    options "/bank_list", BillController, :options
+    get "/bank_list", BillController, :get_bank_list
   end
 
   scope "/admin", BayaqWeb do
