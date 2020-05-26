@@ -92,8 +92,31 @@ defmodule BayaqWeb.BillController do
     {:error}
   end
 
-  def pay_bills(conn, %{"bills" => bills}) do
+  defp get_bank_code(bank_name) do
+    case bank_name do
+      "MB2U0227" -> "MB2U0227"
+      "BCBB0235" -> "BCBB0235"
+      "RHB0218" -> "RHB0218"
+      "PBB0233" -> "PBB0233"
+      "HLB0224" -> "HLB0224"
+      "ABB0233" -> "ABB0233"
+      "ABMB0212" -> "ABMB0212"
+      "AMBB0209" -> "AMBB0209"
+      "BIMB0340" -> "BIMB0340"
+      "BMMB0341" -> "BMMB0341"
+      "BKRM0602" -> "BKRM0602"
+      "BSN0601" -> "BSN0601"
+      "HSBC0223" -> "HSBC0223"
+      "KFH0346" -> "KFH0346"
+      "OCBC0229" -> "OCBC0229"
+      "SCB0216" -> "SCB0216"
+      "UOB0226" -> "UOB0226"
+      "MBB0228" -> "MBB0228"
+      _ -> "MB2U0227"
+    end
+  end
 
+  def pay_bills(conn, %{"bank_name" => bank_name, "bills" => bills}) do
     user = Guardian.Plug.current_resource(conn)
     email = user.email
     name = user.full_name
@@ -129,6 +152,7 @@ defmodule BayaqWeb.BillController do
         "description" => description_with_service
     }
     bill_amount = Money.add(Money.new(charge_amount, :MYR), Money.new(Map.get(bill, "amount"), :MYR)).amount
+    bank_code = get_bank_code(bank_name)
     default_map = %{
       "collection_id" => Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_collection],
       "amount" => bill_amount,
@@ -136,7 +160,9 @@ defmodule BayaqWeb.BillController do
       "name" => name,
       "description" => Map.get(bill, "description"),
       "redirect_url" => Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_url],
-      "callback_url" => Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_backend]
+      "callback_url" => Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_backend],
+      "reference_1_label" => "Bank Code",
+      "reference_1" => bank_code
     }
 
     body = Poison.encode!(default_map)
