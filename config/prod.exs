@@ -83,5 +83,7 @@ config :bayaq, Bayaq.Repo,
   signature: System.get_env("BAYAQ_SIGNATURE"),
   bayaq_collection: System.get_env("BAYAQ_COLLECTION"),
   bayaq_url: System.get_env("BAYAQ_URL"),
+  bayaq_api_bank: System.get_env("bayaq_api_bank"),,
+  bill_plz_username: System.get_env("bill_plz_username"),,
   bayaq_backend: System.get_env("BAYAQ_BACKEND"),
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
