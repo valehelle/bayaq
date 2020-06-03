@@ -10,7 +10,7 @@ defmodule Bayaq.Accounts.User do
     field :email, :string
     field :password, :string
     field :full_name, :string
-    field :bank_code, :integer
+    field :bank_code, :string
     has_many :invoices, Invoice
     has_many :bills, Bill
     timestamps()

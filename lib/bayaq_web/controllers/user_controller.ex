@@ -86,7 +86,6 @@ defmodule BayaqWeb.UserController do
           }
           try do
             {:ok, %HTTPoison.Response{status_code: 200, body: body, headers: headers}} = HTTPoison.get! "https://sebcares.sarawakenergy.com.my/SarawakEnergy3/api/adapters/Subscription/addSubscription?params=%5B%7B%22LOCALE%22%3A%22en%22%2C%22CONTRACT_ACC_NO%22%3A%22#{ref1}%22%2C%22CONTRACT_ACC_NAME%22%3A%22#{String.replace(ref2, " ", "%20")}%22%2C%22CONTRACT_ACC_NICK%22%3A%22#{String.replace(ref2, " ", "%20")}%22%2C%22SUBS_TYPE%22%3A%22TENANT%22%7D%5D", headers, ssl: [{:versions, [:'tlsv1.2']}]
-              IO.inspect body
           rescue
             e -> IO.inspect e
           end
@@ -142,7 +141,6 @@ defmodule BayaqWeb.UserController do
   def update_user_bank(conn, %{"bank_code" => bank_code}) do
     user = Guardian.Plug.current_resource(conn)
     {:ok, user} = Accounts.update_user(user, %{bank_code: bank_code})
-    IO.inspect user
     render(conn, "user.json", user: user)
     
   end
