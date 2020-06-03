@@ -60,6 +60,8 @@ defmodule BayaqWeb.Router do
     options "/bills", UserController, :options
     options "/bank_list", BillController, :options
     get "/bank_list", BillController, :get_bank_list
+    get "/user", UserController, :get_user_info
+    put "/user/bank", UserController, :update_user_bank
   end
 
   scope "/admin", BayaqWeb do

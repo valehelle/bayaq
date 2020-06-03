@@ -10,10 +10,19 @@ defmodule Bayaq.Accounts.User do
     field :email, :string
     field :password, :string
     field :full_name, :string
+    field :bank_code, :integer
     has_many :invoices, Invoice
     has_many :bills, Bill
     timestamps()
   end
+
+    @doc false
+  def bank_code_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:bank_code])
+    |> validate_required([:bank_code])
+  end
+
 
 
     @doc false

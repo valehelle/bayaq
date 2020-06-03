@@ -79,7 +79,7 @@ defmodule Bayaq.Accounts do
   """
   def update_user(%User{} = user, attrs) do
     user
-    |> User.changeset(attrs)
+    |> User.bank_code_changeset(attrs)
     |> Repo.update()
   end
 

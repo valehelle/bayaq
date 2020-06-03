@@ -133,4 +133,19 @@ defmodule BayaqWeb.UserController do
     end
   end
 
+  def get_user_info(conn,_params) do
+    user = Guardian.Plug.current_resource(conn)
+    render(conn, "user.json", user: user)
+    
+  end
+  
+  def update_user_bank(conn, %{"bank_code" => bank_code}) do
+    user = Guardian.Plug.current_resource(conn)
+    {:ok, user} = Accounts.update_user(user, %{bank_code: bank_code})
+    IO.inspect user
+    render(conn, "user.json", user: user)
+    
+  end
+
+
 end
