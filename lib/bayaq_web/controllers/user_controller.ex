@@ -59,7 +59,7 @@ defmodule BayaqWeb.UserController do
               },
               "subject" => "Password Reset",
               "content" => [
-                %{"type"=> "text/html", "value" => "<h4>Someone requested to reset the password on your Bayaq account. If you did not request this, please ignore this email.</h4><h4><a href=\"https://www.bayaqapp.com?page=reset&token=#{uuid}\">Reset Password</a></h4>"}
+                %{"type"=> "text/html", "value" => "<h4>Someone requested to reset the password on your Bayaq account. If you did not request this, please ignore this email.</h4><h4><a href=\"exp://localhost:19000?page=reset&token=#{uuid}\">Reset Password</a></h4>"}
               ]
               
           }
