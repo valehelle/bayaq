@@ -45,6 +45,7 @@ defmodule BayaqWeb.Router do
     options "/users/sign_up", UserController, :options
     post "/users/sign_in", UserController, :login
     options "/users/sign_in", UserController, :options
+    options "/users/reset", UserController, :options
     post "/users/reset", UserController, :create_reset
     put "users/reset", UserController, :reset_password
   end
@@ -63,6 +64,7 @@ defmodule BayaqWeb.Router do
     options "/bank_list", BillController, :options
     get "/bank_list", BillController, :get_bank_list
     get "/user", UserController, :get_user_info
+    options "/user/bank", UserController, :options
     put "/user/bank", UserController, :update_user_bank
   end
 
