@@ -52,6 +52,7 @@ defmodule Bayaq.MixProject do
       {:guardian, "~> 1.0"},
       {:comeonin, "~> 4.0"},
       {:bcrypt_elixir, "~> 0.12"},
+      { :elixir_uuid, "~> 1.2" }
     ]
   end
 

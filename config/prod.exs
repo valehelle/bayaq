@@ -86,4 +86,5 @@ config :bayaq, Bayaq.Repo,
   bayaq_api_bank: System.get_env("bayaq_api_bank"),
   bill_plz_username: System.get_env("bill_plz_username"),
   bayaq_backend: System.get_env("BAYAQ_BACKEND"),
+  send_grid_token: System.get_env("send_grid_token"),
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")

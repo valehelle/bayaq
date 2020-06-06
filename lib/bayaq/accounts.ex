@@ -46,6 +46,10 @@ defmodule Bayaq.Accounts do
 
   end
   def get_user_by_username(username), do: Repo.get_by(User, username: username)
+  def get_user_by_email(email), do: Repo.get_by(User, email: email)
+
+
+
 
   @doc """
   Creates a user.
@@ -80,6 +84,12 @@ defmodule Bayaq.Accounts do
   def update_user(%User{} = user, attrs) do
     user
     |> User.bank_code_changeset(attrs)
+    |> Repo.update()
+  end
+
+  def update_user_password(%User{} = user, attrs) do
+    user
+    |> User.changeset(attrs)
     |> Repo.update()
   end
 
@@ -238,5 +248,126 @@ defmodule Bayaq.Accounts do
   """
   def change_bill(%Bill{} = bill) do
     Bill.changeset(bill, %{})
+  end
+
+  alias Bayaq.Accounts.Reset
+
+  @doc """
+  Returns the list of resets.
+
+  ## Examples
+
+      iex> list_resets()
+      [%Reset{}, ...]
+
+  """
+
+    def get_user_by_token(token) do 
+    query = from r in Reset, 
+            where: r.token == ^token,
+            where: r.has_expired == false
+
+    Repo.one(query)
+    case Repo.one(query) do
+      nil -> {:error}
+      reset -> 
+      user = get_user!(reset.user_id)
+      {:ok, user}
+    end
+  end
+
+  
+  def list_resets do
+    Repo.all(Reset)
+  end
+
+  def invalidate_reset(user_id) do
+    query = from r in Reset, 
+            where: r.user_id == ^user_id
+    resets = Repo.all(query)
+    for reset <- resets do
+      update_reset(reset, %{has_expired: true})
+    end
+  end
+
+  @doc """
+  Gets a single reset.
+
+  Raises `Ecto.NoResultsError` if the Reset does not exist.
+
+  ## Examples
+
+      iex> get_reset!(123)
+      %Reset{}
+
+      iex> get_reset!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_reset!(id), do: Repo.get!(Reset, id)
+
+  @doc """
+  Creates a reset.
+
+  ## Examples
+
+      iex> create_reset(%{field: value})
+      {:ok, %Reset{}}
+
+      iex> create_reset(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_reset(attrs \\ %{}) do
+    %Reset{}
+    |> Reset.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a reset.
+
+  ## Examples
+
+      iex> update_reset(reset, %{field: new_value})
+      {:ok, %Reset{}}
+
+      iex> update_reset(reset, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_reset(%Reset{} = reset, attrs) do
+    reset
+    |> Reset.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Reset.
+
+  ## Examples
+
+      iex> delete_reset(reset)
+      {:ok, %Reset{}}
+
+      iex> delete_reset(reset)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_reset(%Reset{} = reset) do
+    Repo.delete(reset)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking reset changes.
+
+  ## Examples
+
+      iex> change_reset(reset)
+      %Ecto.Changeset{source: %Reset{}}
+
+  """
+  def change_reset(%Reset{} = reset) do
+    Reset.changeset(reset, %{})
   end
 end

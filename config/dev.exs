@@ -81,4 +81,5 @@ config :bayaq, Bayaq.Repo,
   signature: "S-YEsG3H1abCjrGmFoIGntVg",
   bayaq_url: "http://localhost:19006",
   bayaq_backend: "http://localhost:3000/hooks",
+  send_grid_token: "fake_token",
   pool_size: 10

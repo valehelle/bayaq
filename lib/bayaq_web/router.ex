@@ -45,6 +45,8 @@ defmodule BayaqWeb.Router do
     options "/users/sign_up", UserController, :options
     post "/users/sign_in", UserController, :login
     options "/users/sign_in", UserController, :options
+    post "/users/reset", UserController, :create_reset
+    put "users/reset", UserController, :reset_password
   end
 
     scope "/", BayaqWeb do

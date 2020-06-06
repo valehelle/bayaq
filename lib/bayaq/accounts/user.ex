@@ -4,6 +4,8 @@ defmodule Bayaq.Accounts.User do
   alias Bayaq.Invoices.Invoice
   alias Comeonin.Bcrypt
   alias Bayaq.Accounts.Bill
+  alias Bayaq.Accounts.Reset
+
 
 
   schema "users" do
@@ -13,6 +15,8 @@ defmodule Bayaq.Accounts.User do
     field :bank_code, :string
     has_many :invoices, Invoice
     has_many :bills, Bill
+    has_many :resets, Reset
+
     timestamps()
   end
 

@@ -134,4 +134,65 @@ defmodule Bayaq.AccountsTest do
       assert %Ecto.Changeset{} = Accounts.change_bill(bill)
     end
   end
+
+  describe "resets" do
+    alias Bayaq.Accounts.Reset
+
+    @valid_attrs %{has_expired: true, token: "some token"}
+    @update_attrs %{has_expired: false, token: "some updated token"}
+    @invalid_attrs %{has_expired: nil, token: nil}
+
+    def reset_fixture(attrs \\ %{}) do
+      {:ok, reset} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_reset()
+
+      reset
+    end
+
+    test "list_resets/0 returns all resets" do
+      reset = reset_fixture()
+      assert Accounts.list_resets() == [reset]
+    end
+
+    test "get_reset!/1 returns the reset with given id" do
+      reset = reset_fixture()
+      assert Accounts.get_reset!(reset.id) == reset
+    end
+
+    test "create_reset/1 with valid data creates a reset" do
+      assert {:ok, %Reset{} = reset} = Accounts.create_reset(@valid_attrs)
+      assert reset.has_expired == true
+      assert reset.token == "some token"
+    end
+
+    test "create_reset/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_reset(@invalid_attrs)
+    end
+
+    test "update_reset/2 with valid data updates the reset" do
+      reset = reset_fixture()
+      assert {:ok, %Reset{} = reset} = Accounts.update_reset(reset, @update_attrs)
+      assert reset.has_expired == false
+      assert reset.token == "some updated token"
+    end
+
+    test "update_reset/2 with invalid data returns error changeset" do
+      reset = reset_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_reset(reset, @invalid_attrs)
+      assert reset == Accounts.get_reset!(reset.id)
+    end
+
+    test "delete_reset/1 deletes the reset" do
+      reset = reset_fixture()
+      assert {:ok, %Reset{}} = Accounts.delete_reset(reset)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_reset!(reset.id) end
+    end
+
+    test "change_reset/1 returns a reset changeset" do
+      reset = reset_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_reset(reset)
+    end
+  end
 end
