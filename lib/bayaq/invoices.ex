@@ -25,6 +25,7 @@ defmodule Bayaq.Invoices do
   def get_invoices(user_id) do
       query = from i in Invoice,
             where: i.user_id == ^user_id,
+            where: i.status == "PAYMENT_MADE",
             order_by: [desc: i.id],
             preload: [:bills]
     Repo.all(query)
