@@ -145,7 +145,7 @@ defmodule BayaqWeb.BillController do
 
   
     end)
-    charge_amount = 50 * length(bills)
+    charge_amount = 99 * length(bills)
 
     description_with_service = "#{Map.get(bill, "description")} \n Service Fee - RM #{Money.to_string(Money.new(charge_amount, :MYR))}"
     bill = %{

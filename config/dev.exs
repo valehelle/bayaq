@@ -79,7 +79,7 @@ config :bayaq, Bayaq.Repo,
   bill_plz_username: "9900286e-3c1c-435a-a63a-9deb56c3a898:",
   bayaq_collection: "6lh4c0br",
   signature: "S-YEsG3H1abCjrGmFoIGntVg",
-  bayaq_url: "http://localhost:19006",
+  bayaq_url: "https://www.bayaqapp.com",
   bayaq_backend: "http://localhost:3000/hooks",
   send_grid_token: "fake_token",
   pool_size: 10
