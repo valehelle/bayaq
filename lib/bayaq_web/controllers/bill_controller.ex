@@ -249,7 +249,9 @@ defmodule BayaqWeb.BillController do
       }
       render(conn, "show.json", bill: bill)
     rescue
-      e -> {:error}
+      e -> 
+      IO.inspect e
+      {:error}
     end
 
 
