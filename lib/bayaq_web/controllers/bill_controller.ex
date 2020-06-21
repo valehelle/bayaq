@@ -206,8 +206,10 @@ defmodule BayaqWeb.BillController do
   def get_air_perak(conn, %{"account_number" => account_number}) do
 
    try do
+      IO.inspect "calling url"
    options = [recv_timeout: 20000]
       IO.inspect HTTPoison.get "http://onlinebil.lap.com.my:8080/ebilling/login.aspx?" ,[], options
+      IO.inspect "done"
        {:ok, %HTTPoison.Response{status_code: 200, body: body, headers: headers}} = HTTPoison.get "http://onlinebil.lap.com.my:8080/ebilling/login.aspx?"
       {:ok, document} = Floki.parse_document(body)
       {input, input_list, _} = Floki.find(document, "#__VIEWSTATE")
