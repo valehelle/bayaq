@@ -207,47 +207,7 @@ defmodule BayaqWeb.BillController do
 
    try do
        IO.inspect HTTPoison.get "http://onlinebil.lap.com.my:8080/ebilling/login.aspx?"
-      {:ok, document} = Floki.parse_document(body)
-      {input, input_list, _} = Floki.find(document, "#__VIEWSTATE")
-      |> Enum.at(0)
-      {_, view_state} = input_list |> Enum.at(3)
-    
-      {input, input_list, _} = Floki.find(document, "#__VIEWSTATEGENERATOR")
-      |> Enum.at(0)
-      {_, view_state_generator} = input_list |> Enum.at(3)
-
-            {input, input_list, _} = Floki.find(document, "#__EVENTVALIDATION")
-      |> Enum.at(0)
-      {_, event_validation} = input_list |> Enum.at(3)
-
-      body = [
-        {"__VIEWSTATE",view_state},
-        {"__VIEWSTATEGENERATOR", view_state_generator},
-        {"__EVENTVALIDATION", event_validation},
-        {"txtAcco" , account_number},
-        {"BtnChk" , "Semak"},
-        {"__EVENTTARGET" , ""},
-        {"__EVENTARGUMENT" , ""},
-        {"__VIEWSTATEENCRYPTED" , ""},
-        {"txtID", ""},
-        {"txtPwd" , ""},
-        {"txtVC" , ""}
-      ]
-
-      {:ok, %HTTPoison.Response{status_code: 200, body: body}} = HTTPoison.post "http://onlinebil.lap.com.my:8080/ebilling/login.aspx?", {:form, body}, %{"Content-type" => "application/x-www-form-urlencoded"}
-      {:ok, document} = Floki.parse_document(body)
-      {table,th,tr} = Floki.find(document, "#gv")
-      |> Enum.at(0)
-      {tr, gvRow, td_list} = tr |> Enum.at(1)
-      {_, _, amount} = td_list |> Enum.at(1)
-      amount = amount |> Enum.at(0)
-
-      {amount, _} =  amount |> String.replace(~r/\.|\n|RM|\*/,"", global: true) |> Integer.parse
-      bill = %{
-        "description" => "",
-        "amount" => amount,
-      }
-      render(conn, "show.json", bill: bill)
+       {:error}
     rescue
       e -> 
       IO.inspect e
