@@ -203,11 +203,68 @@ defmodule BayaqWeb.BillController do
           end    
   end
 
+  def get_air_perak(conn, %{"account_number" => account_number}) do
+
+   try do
+       {:ok, %HTTPoison.Response{status_code: 200, body: body, headers: headers}} = HTTPoison.get "http://onlinebil.lap.com.my:8080/ebilling/login.aspx?"
+      {:ok, document} = Floki.parse_document(body)
+      {input, input_list, _} = Floki.find(document, "#__VIEWSTATE")
+      |> Enum.at(0)
+      {_, view_state} = input_list |> Enum.at(3)
+    
+      {input, input_list, _} = Floki.find(document, "#__VIEWSTATEGENERATOR")
+      |> Enum.at(0)
+      {_, view_state_generator} = input_list |> Enum.at(3)
+
+            {input, input_list, _} = Floki.find(document, "#__EVENTVALIDATION")
+      |> Enum.at(0)
+      {_, event_validation} = input_list |> Enum.at(3)
+
+      body = [
+        {"__VIEWSTATE",view_state},
+        {"__VIEWSTATEGENERATOR", view_state_generator},
+        {"__EVENTVALIDATION", event_validation},
+        {"txtAcco" , account_number},
+        {"BtnChk" , "Semak"},
+        {"__EVENTTARGET" , ""},
+        {"__EVENTARGUMENT" , ""},
+        {"__VIEWSTATEENCRYPTED" , ""},
+        {"txtID", ""},
+        {"txtPwd" , ""},
+        {"txtVC" , ""}
+      ]
+
+      {:ok, %HTTPoison.Response{status_code: 200, body: body}} = HTTPoison.post "http://onlinebil.lap.com.my:8080/ebilling/login.aspx?", {:form, body}, %{"Content-type" => "application/x-www-form-urlencoded"}
+      {:ok, document} = Floki.parse_document(body)
+      {table,th,tr} = Floki.find(document, "#gv")
+      |> Enum.at(0)
+      {tr, gvRow, td_list} = tr |> Enum.at(1)
+      {_, _, amount} = td_list |> Enum.at(1)
+      amount = amount |> Enum.at(0)
+
+      {amount, _} =  amount |> String.replace(~r/\.|\n|RM|\*/,"", global: true) |> Integer.parse
+      bill = %{
+        "description" => "",
+        "amount" => amount,
+      }
+      render(conn, "show.json", bill: bill)
+    rescue
+      e -> {:error}
+    end
+
+
+     
+  end
+
+
+
   def get_bill_amount(conn, %{"billerCode" => biller_code, "account" => account_number}) do
     case biller_code do
       "5454" -> get_tnb_balance(conn, %{"account_number" => account_number})
       "68502" -> get_indah_water_balance(conn, %{"account_number" => account_number})
       "4200" -> get_air_selangor(conn, %{"account_number" => account_number})
+      "4135" -> get_air_perak(conn, %{"account_number" => account_number})
+
     end
   end
 
