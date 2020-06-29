@@ -3,6 +3,8 @@
   <h3>Email: <%= bill.user.email %> </h3>
   <h3>Company Name: <%= bill.company_name %> </h3>
   <h3>Amount: <%= bill.amount %> </h3>
-  <h3>inserted_at: <%= format_timestamp(bill.inserted_at) %> </h3>
+  <h3>Inserted At: <%= format_timestamp(bill.inserted_at) %> </h3>
+  <h3>Change At: <%= format_timestamp(bill.updated_at) %> </h3>
+
   <hr>
 <% end %>
