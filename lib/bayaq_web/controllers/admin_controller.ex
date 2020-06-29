@@ -7,14 +7,14 @@ defmodule BayaqWeb.AdminController do
 
   def index(conn, _) do
     user = Guardian.Plug.current_resource(conn)
-    case user.email == "hazmiirfan92@gmail.com" do
+    case user.email == "hazmiirfan92@gmail.com" || user.email == "faridzul.ishak@gmail.com" do
       true -> render(conn, "index.html")
       false -> redirect(conn, to: Routes.user_path(conn, :index))
     end
   end
   def users(conn, _) do
     user = Guardian.Plug.current_resource(conn)
-    case user.email == "hazmiirfan92@gmail.com" do
+    case user.email == "hazmiirfan92@gmail.com" || user.email == "faridzul.ishak@gmail.com" do
       true -> 
       users = Accounts.list_users()
       count = length users
@@ -24,7 +24,7 @@ defmodule BayaqWeb.AdminController do
   end
   def bills(conn, _) do
     user = Guardian.Plug.current_resource(conn)
-    case user.email == "hazmiirfan92@gmail.com" do
+    case user.email == "hazmiirfan92@gmail.com" || user.email == "faridzul.ishak@gmail.com" do
       true -> 
       bills = Accounts.list_bills()
       render(conn, "bills.html", bills: bills)
@@ -33,7 +33,7 @@ defmodule BayaqWeb.AdminController do
   end
   def paid_bills(conn, _) do
     user = Guardian.Plug.current_resource(conn)
-    case user.email == "hazmiirfan92@gmail.com" do
+    case user.email == "hazmiirfan92@gmail.com" || user.email == "faridzul.ishak@gmail.com" do
       true -> 
       invoices = Invoices.get_invoice_paid()
       render(conn, "invoice.html", invoices: invoices)

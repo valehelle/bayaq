@@ -3,6 +3,7 @@
   <h3>Email: <%= invoice.user.email %> </h3>
   <h3>Invoice Id: <%= invoice.id %> </h3>
   <h3>Invoice Status: <%= invoice.status %> </h3>
+  <h3>Created at: <%= format_timestamp(invoice.inserted_at) %> </h3>
   <%= for bill <- invoice.bills do %>
   <div style = "background-color: lightgrey">
     <h5>Company Name: <%= bill.company_name %></h5>
