@@ -96,6 +96,9 @@ defmodule BayaqWeb.UserController do
     "hazmiirfan92@gmail.com" ->
       Accounts.authenticate_user(email, password)
       |> login_reply_web(conn)
+    "faridzul.ishak@gmail.com" ->
+      Accounts.authenticate_user(email, password)
+      |> login_reply_web(conn)
     _ -> redirect(conn, to: Routes.user_path(conn, :index))
     end
   end
