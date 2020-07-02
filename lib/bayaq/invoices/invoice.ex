@@ -8,6 +8,7 @@ defmodule Bayaq.Invoices.Invoice do
     field :status, :string, default: "WAITING_PAYMENT"
     field :stripe_id, :string
     field :amount, Money.Ecto.Amount.Type
+    field :service_charge, Money.Ecto.Amount.Type, default: 99
     has_many :bills, Bill
     belongs_to :user, User
     timestamps()
