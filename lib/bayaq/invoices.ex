@@ -54,6 +54,15 @@ defmodule Bayaq.Invoices do
             preload: [:bills, :user]
     Repo.all(query)
   end
+
+  
+  def get_invoice_by_ref(user_id, ref_id) do
+    query = from i in Invoice,
+            where: i.user_id == ^user_id,
+            where: i.stripe_id == ^ref_id,
+            preload: [:bills, :user]
+    Repo.one(query)
+  end
   @doc """
   Creates a invoice.
 
