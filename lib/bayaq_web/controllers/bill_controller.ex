@@ -295,7 +295,6 @@ def get_air_kelantan(conn, %{"account_number" => account_number}) do
       [_, {_,_,[_,_,amount_class]}] = Floki.find(document, ".card-title.pricing-card-title")
       {_,_,[amount]} = amount_class
       {amount, _} =  amount |> String.replace(~r/\.|\n|RM|\*/,"", global: true) |> Integer.parse
-      IO.inspect amount
       bill = %{
         "description" => "",
         "amount" => amount,
