@@ -260,6 +260,58 @@ defmodule BayaqWeb.BillController do
   end
 
 
+def get_air_kelantan(conn, %{"account_number" => account_number}) do
+
+   try do
+
+      {:ok, %HTTPoison.Response{status_code: 200, body: body, headers: headers}} = HTTPoison.get "https://billing.airkelantan.com.my/billing/bill.php?search=#{account_number}"
+      response = Poison.decode!(body) 
+      %{"data" => %{"TOTAL_ARREARS" => amount}} =  response
+      {amount, _} =  amount |> String.replace(~r/\.|\n|RM|\*/,"", global: true) |> Integer.parse
+      bill = %{
+        "description" => "",
+        "amount" => amount,
+      }
+      render(conn, "show.json", bill: bill)
+    rescue
+      e -> 
+      IO.inspect e
+      {:error}
+    end
+
+
+     
+  end
+
+  def get_air_terengganu(conn, %{"account_number" => account_number}) do
+
+   try do
+    options = [recv_timeout: 20000]
+      body = Poison.encode!(%{"acc_no" => account_number})
+      {:ok, %HTTPoison.Response{status_code: 200, body: body, headers: headers}} = HTTPoison.post "https://www.satuwater.com.my/maklumat_akaun_pengguna_v2/akaun_display.php", {:form, [{"acc_no", account_number}]}, %{"Content-type" => "application/x-www-form-urlencoded"}, options
+      response = Poison.decode!(body) 
+      %{"html" => html} = response
+      {:ok, document} = Floki.parse_document(html)
+      [_, {_,_,[_,_,amount_class]}] = Floki.find(document, ".card-title.pricing-card-title")
+      {_,_,[amount]} = amount_class
+      {amount, _} =  amount |> String.replace(~r/\.|\n|RM|\*/,"", global: true) |> Integer.parse
+      IO.inspect amount
+      bill = %{
+        "description" => "",
+        "amount" => amount,
+      }
+      render(conn, "show.json", bill: bill)
+    rescue
+      e -> 
+      IO.inspect e
+      {:error}
+    end
+
+
+     
+  end
+
+
 
   def get_bill_amount(conn, %{"billerCode" => biller_code, "account" => account_number}) do
     case biller_code do
@@ -267,6 +319,8 @@ defmodule BayaqWeb.BillController do
       "68502" -> get_indah_water_balance(conn, %{"account_number" => account_number})
       "4200" -> get_air_selangor(conn, %{"account_number" => account_number})
       "4135" -> get_air_perak(conn, %{"account_number" => account_number})
+      "9217" -> get_air_kelantan(conn, %{"account_number" => account_number})
+      "8144" -> get_air_terengganu(conn, %{"account_number" => account_number})
 
     end
   end
