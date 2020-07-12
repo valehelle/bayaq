@@ -2,6 +2,8 @@
   <h3>Name: <%= bill.user.full_name %> </h3>
   <h3>Email: <%= bill.user.email %> </h3>
   <h3>Company Name: <%= bill.company_name %> </h3>
+  <h3>ref 1: <%= bill.ref1 %> </h3>
+  <h3>ref 2: <%= bill.ref2 %> </h3>
   <h3>Amount: <%= bill.amount %> </h3>
   <h3>Inserted At: <%= format_timestamp(bill.inserted_at) %> </h3>
   <h3>Change At: <%= format_timestamp(bill.updated_at) %> </h3>
