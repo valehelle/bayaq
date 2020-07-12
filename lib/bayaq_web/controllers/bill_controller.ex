@@ -170,7 +170,7 @@ defmodule BayaqWeb.BillController do
     {:ok, %HTTPoison.Response{status_code: 200, body: body}} = HTTPoison.post Application.get_env(:bayaq, Bayaq.Repo)[:bayaq_api_key], body, %{"Content-type" => "application/json"}
     body = Poison.decode!(body)
     stripe_id =  Map.get(body, "id")
-    invoice_param = %{"stripe_id" => stripe_id, "bills" => bills, "email" => email, "user_id" => user.id, "amount" => bill_amount}
+    invoice_param = %{"stripe_id" => stripe_id, "bills" => bills, "email" => email, "user_id" => user.id, "amount" => bill_amount, "service_charge" => Money.new(charge_amount, :MYR).amount,}
 
     {:ok, invoice} = Invoices.create_invoice(invoice_param)
     invoice = %{"id" => invoice.id, "url" => Map.get(body, "url")}
